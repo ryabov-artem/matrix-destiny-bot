@@ -922,7 +922,6 @@ async def fallback(message: Message):
         charge_user_for_spread(user_id)
 
         await message.answer(
-        await message.answer(
             f"✨ <b>Личная матрица</b>\n\n"
             f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
             f"🔢 <b>Основные энергии</b>\n\n"
@@ -934,7 +933,6 @@ async def fallback(message: Message):
             f"━━━━━━━━━━\n\n"
             f"{markdown_bold_to_html(interpretation)}",
             parse_mode="HTML"
-        )
         )
         return
 
