@@ -24,26 +24,36 @@ def parse_birth_date(date_text: str) -> tuple[int, int, int]:
 def calculate_personal_matrix(date_text: str) -> dict:
     day, month, year = parse_birth_date(date_text)
 
-    day_energy = normalize_arcana(day)
-    month_energy = normalize_arcana(month)
-    year_energy = normalize_arcana(digit_sum(year))
+    day_arcana = normalize_arcana(day)
+    month_arcana = normalize_arcana(month)
+    year_arcana = normalize_arcana(digit_sum(year))
 
-    destiny_energy = normalize_arcana(day_energy + month_energy + year_energy)
-    karma_energy = normalize_arcana(day_energy + year_energy)
-    money_energy = normalize_arcana(month_energy + year_energy)
-    relationship_energy = normalize_arcana(day_energy + month_energy)
-    talent_energy = normalize_arcana(destiny_energy + relationship_energy)
-    comfort_zone_energy = normalize_arcana(destiny_energy + karma_energy)
+    destiny_arcana = normalize_arcana(day_arcana + month_arcana + year_arcana)
+    center_arcana = normalize_arcana(day_arcana + month_arcana + year_arcana + destiny_arcana)
+
+    karma_arcana = normalize_arcana(day_arcana + year_arcana)
+    money_arcana = normalize_arcana(month_arcana + year_arcana)
+    relationship_arcana = normalize_arcana(day_arcana + month_arcana)
+    talent_arcana = normalize_arcana(destiny_arcana + relationship_arcana)
+    comfort_zone_arcana = normalize_arcana(destiny_arcana + karma_arcana)
 
     return {
-        "birth_date": date_text,
-        "day_energy": day_energy,
-        "month_energy": month_energy,
-        "year_energy": year_energy,
-        "destiny_energy": destiny_energy,
-        "karma_energy": karma_energy,
-        "money_energy": money_energy,
-        "relationship_energy": relationship_energy,
-        "talent_energy": talent_energy,
-        "comfort_zone_energy": comfort_zone_energy,
+        "birth_date": date_text.strip(),
+        "day": day,
+        "month": month,
+        "year": year,
+        "base": {
+            "day_arcana": day_arcana,
+            "month_arcana": month_arcana,
+            "year_arcana": year_arcana,
+            "destiny_arcana": destiny_arcana,
+            "center_arcana": center_arcana,
+        },
+        "channels": {
+            "karma_arcana": karma_arcana,
+            "money_arcana": money_arcana,
+            "relationship_arcana": relationship_arcana,
+            "talent_arcana": talent_arcana,
+            "comfort_zone_arcana": comfort_zone_arcana,
+        },
     }
