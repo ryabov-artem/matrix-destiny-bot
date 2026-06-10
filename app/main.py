@@ -94,7 +94,7 @@ admin_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="👥 Пользователи")],
         [KeyboardButton(text="📈 Статистика")],
-        [KeyboardButton(text="📜 Последние расклады")],
+        [KeyboardButton(text="📜 Последние анализы")],
         [KeyboardButton(text="📊 Популярность")],
         [KeyboardButton(text="📣 Рассылка")],
         [KeyboardButton(text="🎁 Акции")],
@@ -130,9 +130,9 @@ broadcast_confirm_keyboard = ReplyKeyboardMarkup(
 
 promo_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="🎁 Акция: 5 раскладов")],
+        [KeyboardButton(text="🎁 Акция: 5 анализов")],
         [KeyboardButton(text="🔮 Напомнить про карту дня")],
-        [KeyboardButton(text="💰 Скидка на расклады")],
+        [KeyboardButton(text="💰 Скидка на анализы")],
         [KeyboardButton(text="⬅️ Назад")]
     ],
     resize_keyboard=True
@@ -217,7 +217,7 @@ async def admin_give_balance(message: Message):
     add_balance(target_user_id, amount)
 
     await message.answer(
-        f"✅ Начислено {amount} расклад(ов).\n"
+        f"✅ Начислено {amount} анализ(ов).\n"
         f"Пользователь: {target_user_id}"
     )
 
@@ -225,8 +225,8 @@ async def admin_give_balance(message: Message):
         await bot.send_message(
             chat_id=target_user_id,
             text=(
-                f"💎 Тебе начислено {amount} расклад(ов).\n\n"
-                "Можешь использовать их в любом платном раскладе."
+                f"💎 Тебе начислено {amount} анализ(ов).\n\n"
+                "Можешь использовать их в любом платном анализе."
             )
         )
     except Exception:
@@ -240,10 +240,10 @@ async def balance(message: Message):
     balance_count = get_balance(message.from_user.id)
 
     await message.answer(
-        f"💎 Баланс раскладов\n\n"
-        f"Доступно: {balance_count} расклад(ов)\n\n"
-        f"Для получения одного ответа расходуется 1 расклад с баланса.\n\n"
-        f"1 расклад = 1 ответ карт\n\n"
+        f"💎 Баланс анализов\n\n"
+        f"Доступно: {balance_count} анализ(ов)\n\n"
+        f"Для получения одного разбора расходуется 1 анализ с баланса.\n\n"
+        f"1 анализ = 1 персональный разбор\n\n"
         f"Пополните баланс ниже 👇",
         reply_markup=shop_keyboard
     )
@@ -262,7 +262,7 @@ def create_yookassa_payment(user_id: int, count: int, amount_rub: int):
             "type": "redirect",
             "return_url": YOOKASSA_RETURN_URL
         },
-        "description": f"Арканум: {count} расклад(ов)",
+        "description": f"Матрица судьбы: {count} анализ(ов)",
         "metadata": {
             "user_id": str(user_id),
             "count": str(count)
@@ -272,7 +272,7 @@ def create_yookassa_payment(user_id: int, count: int, amount_rub: int):
     return payment
 
 
-@dp.message(F.text.contains("Купить 1 расклад"))
+@dp.message(F.text.contains("Купить 1 анализ"))
 async def buy_one_spread(message: Message):
     if not YOOKASSA_SHOP_ID or not YOOKASSA_SECRET_KEY:
         await message.answer("Оплата временно недоступна. Не найдены данные ЮKassa.")
@@ -292,14 +292,14 @@ async def buy_one_spread(message: Message):
     )
 
     await message.answer(
-        "🔮 1 расклад\n\n"
+        "🪙 1 анализ\n\n"
         "Стоимость: 99 ₽\n\n"
         "Нажмите кнопку ниже и выберите удобный способ оплаты: карта, СБП, SberPay или другой доступный способ.",
         reply_markup=keyboard
     )
 
 
-@dp.message(F.text.contains("Купить 5 раскладов"))
+@dp.message(F.text.contains("Купить 5 анализов"))
 async def buy_five_spreads(message: Message):
     if not YOOKASSA_SHOP_ID or not YOOKASSA_SECRET_KEY:
         await message.answer("Оплата временно недоступна. Не найдены данные ЮKassa.")
@@ -319,7 +319,7 @@ async def buy_five_spreads(message: Message):
     )
 
     await message.answer(
-        "✨ 5 раскладов\n\n"
+        "💎 5 анализов\n\n"
         "Стоимость: 299 ₽\n\n"
         "Нажмите кнопку ниже и выберите удобный способ оплаты: карта, СБП, SberPay или другой доступный способ.",
         reply_markup=keyboard
@@ -328,7 +328,7 @@ async def buy_five_spreads(message: Message):
 
 
 
-@dp.message(F.text.contains("Купить 10 раскладов"))
+@dp.message(F.text.contains("Купить 10 анализов"))
 async def buy_ten_spreads(message: Message):
     if not YOOKASSA_SHOP_ID or not YOOKASSA_SECRET_KEY:
         await message.answer("Оплата временно недоступна. Не найдены данные ЮKassa.")
@@ -348,7 +348,7 @@ async def buy_ten_spreads(message: Message):
     )
 
     await message.answer(
-        "🔮 10 раскладов\n\n"
+        "✨ 10 анализов\n\n"
         "Стоимость: 499 ₽\n\n"
         "Выгодный пакет для нескольких вопросов: отношения, работа, деньги и личные ситуации.\n\n"
         "Нажмите кнопку ниже и выберите удобный способ оплаты.",
@@ -356,7 +356,7 @@ async def buy_ten_spreads(message: Message):
     )
 
 
-@dp.message(F.text.contains("Купить 20 раскладов"))
+@dp.message(F.text.contains("Купить 20 анализов"))
 async def buy_twenty_spreads(message: Message):
     if not YOOKASSA_SHOP_ID or not YOOKASSA_SECRET_KEY:
         await message.answer("Оплата временно недоступна. Не найдены данные ЮKassa.")
@@ -376,9 +376,9 @@ async def buy_twenty_spreads(message: Message):
     )
 
     await message.answer(
-        "👑 20 раскладов\n\n"
+        "👑 20 анализов\n\n"
         "Стоимость: 799 ₽\n\n"
-        "Самый выгодный пакет для тех, кто часто обращается к Аркануму.\n\n"
+        "Самый выгодный пакет для тех, кто планирует несколько разборов.\n\n"
         "Нажмите кнопку ниже и выберите удобный способ оплаты.",
         reply_markup=keyboard
     )
@@ -490,17 +490,17 @@ async def history(message: Message):
     if not spreads:
         await message.answer(
             "📜 История пока пустая.\n\n"
-            "Сделай расклад, и он появится здесь."
+            "Сделайте анализ, и он появится здесь."
         )
         return
 
-    text = "📜 Последние расклады:\n\n"
+    text = "📜 Последние анализы:\n\n"
 
     for spread in spreads:
         text += (
             f"🔮 #{spread['id']} — {spread['spread_type']}\n"
             f"Вопрос: {spread['question']}\n"
-            f"Карты: {spread['cards']}\n\n"
+            f"Энергии: {spread['cards']}\n\n"
         )
 
     await message.answer(text)
@@ -509,7 +509,7 @@ async def history(message: Message):
 @dp.message(F.text == "ℹ️ О боте")
 async def about(message: Message):
     await message.answer(
-        "ℹ️ Бот делает развлекательные AI-расклады Таро.\n\n"
+        "ℹ️ Бот делает развлекательные AI-разборы по системе 22 арканов.\n\n"
         "Он не предсказывает будущее наверняка и не заменяет профессиональные консультации."
     )
 
@@ -573,7 +573,7 @@ async def admin_users(message: Message):
     await message.answer(text)
 
 
-@dp.message(F.text == "📜 Последние расклады")
+@dp.message(F.text == "📜 Последние анализы")
 async def admin_recent_spreads(message: Message):
     if message.from_user.id != ADMIN_ID:
         await message.answer("Нет доступа.")
@@ -585,7 +585,7 @@ async def admin_recent_spreads(message: Message):
         await message.answer("Раскладов пока нет.")
         return
 
-    text = "📜 Последние расклады:\n\n"
+    text = "📜 Последние анализы:\n\n"
 
     for spread in spreads:
         username = spread["username"] or "без username"
@@ -611,10 +611,10 @@ async def admin_popularity(message: Message):
     stats = get_spread_type_stats()
 
     if not stats:
-        await message.answer("📊 Пока нет данных по раскладам.")
+        await message.answer("📊 Пока нет данных по анализам.")
         return
 
-    text = "📊 Популярность раскладов:\n\n"
+    text = "📊 Популярность анализов:\n\n"
 
     for item in stats:
         text += f"{item['spread_type']}: {item['count']}\n"
@@ -635,16 +635,16 @@ async def admin_promos(message: Message):
     )
 
 
-@dp.message(F.text == "🎁 Акция: 5 раскладов")
+@dp.message(F.text == "🎁 Акция: 5 анализов")
 async def promo_five_spreads(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
 
     pending_broadcast[message.from_user.id] = (
-        "🎁 <b>Специальное предложение в Аркануме</b>\n\n"
-        "Получите сразу <b>5 раскладов</b> по выгодной цене — 299 ₽.\n\n"
+        "🎁 <b>Специальное предложение в Матрице судьбы</b>\n\n"
+        "Получите сразу <b>5 анализов</b> по выгодной цене — 299 ₽.\n\n"
         "🔮 Можно использовать для вопросов про отношения, карьеру, деньги и личные ситуации.\n\n"
-        "Нажмите 💎 Баланс, чтобы пополнить запас раскладов."
+        "Нажмите 💎 Баланс, чтобы пополнить запас анализов."
     )
 
     await message.answer(
@@ -662,8 +662,8 @@ async def promo_daily_card(message: Message):
         return
 
     pending_broadcast[message.from_user.id] = (
-        "🔮 <b>Карта дня уже ждёт вас</b>\n\n"
-        "Загляните в Арканум и получите короткую подсказку на сегодня.\n\n"
+        "✨ <b>Личная матрица уже ждёт вас</b>\n\n"
+        "Откройте Матрицу судьбы и выберите подходящий разбор.\n\n"
         "Иногда одна карта помогает увидеть день чуть яснее ✨"
     )
 
@@ -676,14 +676,14 @@ async def promo_daily_card(message: Message):
     )
 
 
-@dp.message(F.text == "💰 Скидка на расклады")
+@dp.message(F.text == "💰 Скидка на анализы")
 async def promo_discount(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
 
     pending_broadcast[message.from_user.id] = (
-        "💰 <b>Выгодный момент для расклада</b>\n\n"
-        "Пакет из <b>5 раскладов</b> сейчас выгоднее, чем покупать по одному.\n\n"
+        "💰 <b>Выгодный момент для анализа</b>\n\n"
+        "Пакет из <b>5 анализов</b> сейчас выгоднее, чем покупать по одному.\n\n"
         "🔮 Задайте вопросы, которые давно откладывали: отношения, работа, деньги или личный выбор.\n\n"
         "Нажмите 💎 Баланс и выберите подходящий вариант."
     )
@@ -710,9 +710,9 @@ async def admin_sales_funnel(message: Message):
         "📈 Воронка продаж\n\n"
         f"👥 Пользователей всего: {funnel['users_count']}\n"
         f"🔮 Получили карту дня: {funnel['daily_card_users']}\n"
-        f"📜 Сделали расклад: {funnel['spread_users']}\n"
+        f"📜 Сделали анализ: {funnel['spread_users']}\n"
         f"💰 Совершили покупку: {funnel['paying_users']}\n\n"
-        f"📜 Конверсия в расклад: {funnel['conversion_to_spread']}%\n"
+        f"📜 Конверсия в анализ: {funnel['conversion_to_spread']}%\n"
         f"💰 Конверсия в покупку: {funnel['conversion_to_payment']}%"
     )
 
@@ -739,13 +739,13 @@ async def admin_top_users(message: Message):
     else:
         text += "Пока нет покупок.\n"
 
-    text += "\n📜 По раскладам:\n"
+    text += "\n📜 По анализам:\n"
     if data["top_spreads"]:
         for i, user in enumerate(data["top_spreads"], start=1):
             name = user["username"] or user["first_name"] or str(user["user_id"])
             text += f"{i}. {name} — {user['spreads_count']} раскл.\n"
     else:
-        text += "Пока нет раскладов.\n"
+        text += "Пока нет анализов.\n"
 
     await message.answer(text)
 
@@ -828,7 +828,7 @@ async def process_spread(message: Message, spread_type, intro_text, interpret_fu
             caption=f"{index}. {card['name']} ({card['orientation']})"
         )
 
-    await message.answer("✨ Интерпретирую расклад...")
+    await message.answer("✨ Готовлю разбор...")
 
     interpretation = interpret_func(question, cards)
 
@@ -871,7 +871,7 @@ async def fallback(message: Message):
         await process_spread(
             message,
             "Деньги",
-            "💰 Вытягиваю карты для денежного расклада...",
+            "💰 Вытягиваю карты для денежного анализа...",
             interpret_money_spread
         )
         return
@@ -881,7 +881,7 @@ async def fallback(message: Message):
         await process_spread(
             message,
             "Карьера",
-            "💼 Вытягиваю карты для карьерного расклада...",
+            "💼 Вытягиваю карты для анализа предназначения...",
             interpret_career_spread
         )
         return
@@ -891,7 +891,7 @@ async def fallback(message: Message):
         await process_spread(
             message,
             "Отношения",
-            "❤️ Вытягиваю карты для расклада на отношения...",
+            "❤️ Вытягиваю карты для анализа совместимости...",
             interpret_relationship_spread
         )
         return
@@ -900,7 +900,7 @@ async def fallback(message: Message):
         awaiting_three_card_question.remove(user_id)
         await process_spread(
             message,
-            "Общий расклад",
+            "Личная матрица",
             "🃏 Вытягиваю три карты...",
             interpret_three_cards
         )
