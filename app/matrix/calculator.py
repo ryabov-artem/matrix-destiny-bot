@@ -57,3 +57,30 @@ def calculate_personal_matrix(date_text: str) -> dict:
             "comfort_zone_arcana": comfort_zone_arcana,
         },
     }
+
+
+def calculate_compatibility_matrix(date1: str, date2: str) -> dict:
+    person1 = calculate_personal_matrix(date1)
+    person2 = calculate_personal_matrix(date2)
+
+    pair_center = normalize_arcana(
+        person1["base"]["center_arcana"] + person2["base"]["center_arcana"]
+    )
+    pair_destiny = normalize_arcana(
+        person1["base"]["destiny_arcana"] + person2["base"]["destiny_arcana"]
+    )
+    pair_relationship = normalize_arcana(
+        person1["channels"]["relationship_arcana"] + person2["channels"]["relationship_arcana"]
+    )
+
+    return {
+        "date1": person1["birth_date"],
+        "date2": person2["birth_date"],
+        "person1": person1,
+        "person2": person2,
+        "pair": {
+            "center_arcana": pair_center,
+            "destiny_arcana": pair_destiny,
+            "relationship_arcana": pair_relationship,
+        },
+    }

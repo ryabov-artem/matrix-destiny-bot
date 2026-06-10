@@ -4,12 +4,8 @@ import uuid
 import re
 
 from ai import (
-    interpret_day_card,
-    interpret_three_cards,
-    interpret_relationship_spread,
-    interpret_career_spread,
-    interpret_money_spread,
-    interpret_personal_matrix
+    interpret_personal_matrix,
+    interpret_compatibility
 )
 
 from database import (
@@ -37,7 +33,7 @@ from database import (
     add_balance
 )
 
-from matrix.calculator import calculate_personal_matrix
+from matrix.calculator import calculate_personal_matrix, calculate_compatibility_matrix
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.client.session.aiohttp import AiohttpSession
@@ -70,6 +66,7 @@ awaiting_relationship_question = set()
 awaiting_career_question = set()
 awaiting_money_question = set()
 awaiting_personal_matrix_date = set()
+awaiting_compatibility_dates = set()
 awaiting_broadcast_text = set()
 pending_broadcast = {}
 
@@ -409,15 +406,19 @@ async def matrix_personal(message: Message):
 @dp.message(F.text == "❤️ Совместимость")
 async def matrix_compatibility(message: Message):
     save_user(message.from_user)
+    user_id = message.from_user.id
+
+    if not user_has_spread_access(user_id):
+        await no_access_message(message)
+        return
+
+    awaiting_compatibility_dates.add(user_id)
+
     await message.answer(
         "❤️ <b>Совместимость</b>\n\n"
-        "Раздел находится в разработке.\n\n"
-        "В версии 1.0 здесь будет разбор совместимости по двум датам рождения:\n"
-        "• сильные стороны союза;\n"
-        "• возможные напряжения;\n"
-        "• точки роста пары;\n"
-        "• рекомендации для отношений.\n\n"
-        "Скоро здесь появится полноценный анализ ✨",
+        "Введите две даты рождения, каждую с новой строки:\n\n"
+        "<b>29.05.1995</b>\n"
+        "<b>14.02.1997</b>",
         parse_mode="HTML"
     )
 
@@ -835,6 +836,60 @@ async def fallback(message: Message):
             f"{message.text}\n\n"
             "Отправить?",
             reply_markup=broadcast_confirm_keyboard
+        )
+        return
+
+    if user_id in awaiting_compatibility_dates:
+        awaiting_compatibility_dates.remove(user_id)
+
+        dates = [line.strip() for line in message.text.splitlines() if line.strip()]
+
+        if len(dates) != 2:
+            await message.answer(
+                "⚠️ Нужно ввести ровно две даты, каждую с новой строки.\n\n"
+                "Например:\n"
+                "29.05.1995\n"
+                "14.02.1997"
+            )
+            awaiting_compatibility_dates.add(user_id)
+            return
+
+        try:
+            compatibility = calculate_compatibility_matrix(dates[0], dates[1])
+        except ValueError as e:
+            await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз.")
+            awaiting_compatibility_dates.add(user_id)
+            return
+
+        await message.answer("❤️ Рассчитываю совместимость...")
+
+        try:
+            interpretation = interpret_compatibility(compatibility)
+        except Exception as e:
+            await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
+            return
+
+        save_spread(
+            user_id=user_id,
+            spread_type="Совместимость",
+            question=f"{compatibility['date1']} + {compatibility['date2']}",
+            cards=[],
+            answer=interpretation
+        )
+
+        charge_user_for_spread(user_id)
+
+        await message.answer(
+            f"❤️ <b>Совместимость</b>\n\n"
+            f"👤 Партнер 1: <b>{compatibility['date1']}</b>\n"
+            f"👤 Партнер 2: <b>{compatibility['date2']}</b>\n\n"
+            f"🔢 <b>Энергии союза</b>\n\n"
+            f"• Центр пары — {compatibility['pair']['center_arcana']}\n"
+            f"• Предназначение пары — {compatibility['pair']['destiny_arcana']}\n"
+            f"• Канал отношений — {compatibility['pair']['relationship_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML"
         )
         return
 

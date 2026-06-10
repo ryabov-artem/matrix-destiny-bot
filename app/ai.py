@@ -27,3 +27,16 @@ def interpret_personal_matrix(matrix: dict):
     )
 
     return response.output_text
+
+
+def interpret_compatibility(data: dict):
+    from matrix.prompts import build_compatibility_prompt
+
+    prompt = build_compatibility_prompt(data)
+
+    response = client.responses.create(
+        model="gpt-5.4",
+        input=prompt
+    )
+
+    return response.output_text
