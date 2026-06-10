@@ -3,7 +3,7 @@ import httpx
 from dotenv import load_dotenv
 from openai import OpenAI
 
-load_dotenv("/opt/bots/tarot_bot/.env")
+load_dotenv("/opt/bots/matrix_bot/.env")
 
 PROXY_URL = os.getenv("PROXY_URL")
 
@@ -234,6 +234,19 @@ def interpret_money_spread(question, cards):
 💡 Совет:
 осторожный вывод для размышления.
 """
+
+    response = client.responses.create(
+        model="gpt-5.5",
+        input=prompt
+    )
+
+    return response.output_text
+
+
+def interpret_personal_matrix(matrix: dict):
+    from matrix.prompts import build_personal_matrix_prompt
+
+    prompt = build_personal_matrix_prompt(matrix)
 
     response = client.responses.create(
         model="gpt-5.5",

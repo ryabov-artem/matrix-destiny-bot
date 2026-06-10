@@ -8,7 +8,8 @@ from ai import (
     interpret_three_cards,
     interpret_relationship_spread,
     interpret_career_spread,
-    interpret_money_spread
+    interpret_money_spread,
+    interpret_personal_matrix
 )
 
 from database import (
@@ -37,6 +38,7 @@ from database import (
 )
 
 from tarot import draw_card, draw_three_cards
+from matrix.calculator import calculate_personal_matrix
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.client.session.aiohttp import AiohttpSession
@@ -68,6 +70,7 @@ awaiting_three_card_question = set()
 awaiting_relationship_question = set()
 awaiting_career_question = set()
 awaiting_money_question = set()
+awaiting_personal_matrix_date = set()
 awaiting_broadcast_text = set()
 pending_broadcast = {}
 
@@ -387,16 +390,19 @@ async def buy_twenty_spreads(message: Message):
 @dp.message(F.text == "✨ Личная матрица")
 async def matrix_personal(message: Message):
     save_user(message.from_user)
+    user_id = message.from_user.id
+
+    if not user_has_spread_access(user_id):
+        await no_access_message(message)
+        return
+
+    awaiting_personal_matrix_date.add(user_id)
+
     await message.answer(
         "✨ <b>Личная матрица</b>\n\n"
-        "Раздел находится в разработке.\n\n"
-        "В версии 1.0 здесь будет персональный разбор по дате рождения:\n"
-        "• основные энергии матрицы;\n"
-        "• сильные стороны;\n"
-        "• таланты;\n"
-        "• зоны роста;\n"
-        "• жизненные задачи.\n\n"
-        "Скоро здесь появится полноценный анализ ✨",
+        "Введите дату рождения в формате:\n\n"
+        "<b>ДД.ММ.ГГГГ</b>\n\n"
+        "Например: <b>29.05.1995</b>",
         parse_mode="HTML"
     )
 
@@ -863,6 +869,42 @@ async def fallback(message: Message):
             f"{message.text}\n\n"
             "Отправить?",
             reply_markup=broadcast_confirm_keyboard
+        )
+        return
+
+    if user_id in awaiting_personal_matrix_date:
+        awaiting_personal_matrix_date.remove(user_id)
+
+        try:
+            matrix = calculate_personal_matrix(message.text)
+        except ValueError as e:
+            await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз: например, 29.05.1995")
+            awaiting_personal_matrix_date.add(user_id)
+            return
+
+        await message.answer("✨ Рассчитываю вашу личную матрицу...")
+
+        try:
+            interpretation = interpret_personal_matrix(matrix)
+        except Exception as e:
+            await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
+            return
+
+        save_spread(
+            user_id=user_id,
+            spread_type="Личная матрица",
+            question=matrix["birth_date"],
+            cards=[],
+            answer=interpretation
+        )
+
+        charge_user_for_spread(user_id)
+
+        await message.answer(
+            f"✨ <b>Личная матрица</b>\n\n"
+            f"Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML"
         )
         return
 
