@@ -78,10 +78,10 @@ def markdown_bold_to_html(text):
 
 def get_main_keyboard(user_id):
     keyboard = [
-        [KeyboardButton(text="🎁 Карта дня"), KeyboardButton(text="🌟 Общий расклад")],
-        [KeyboardButton(text="❤️ Отношения"), KeyboardButton(text="💼 Карьера")],
-        [KeyboardButton(text="💰 Деньги"), KeyboardButton(text="💎 Баланс")],
-        [KeyboardButton(text="📜 История"), KeyboardButton(text="ℹ️ О боте")]
+        [KeyboardButton(text="✨ Личная матрица"), KeyboardButton(text="❤️ Совместимость")],
+        [KeyboardButton(text="👶 Детская матрица"), KeyboardButton(text="💰 Денежный канал")],
+        [KeyboardButton(text="🎯 Предназначение"), KeyboardButton(text="🔥 Кармические задачи")],
+        [KeyboardButton(text="💎 Баланс"), KeyboardButton(text="ℹ️ О боте")]
     ]
 
     if user_id == ADMIN_ID:
@@ -110,10 +110,10 @@ admin_keyboard = ReplyKeyboardMarkup(
 
 shop_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="🪙 Купить 1 расклад — 99 ₽")],
-        [KeyboardButton(text="💎 Купить 5 раскладов — 299 ₽")],
-        [KeyboardButton(text="🔮 Купить 10 раскладов — 499 ₽")],
-        [KeyboardButton(text="👑 Купить 20 раскладов — 799 ₽")],
+        [KeyboardButton(text="🪙 Купить 1 анализ — 99 ₽")],
+        [KeyboardButton(text="💎 Купить 5 анализов — 299 ₽")],
+        [KeyboardButton(text="✨ Купить 10 анализов — 499 ₽")],
+        [KeyboardButton(text="👑 Купить 20 анализов — 799 ₽")],
         [KeyboardButton(text="⬅️ Назад")]
     ],
     resize_keyboard=True
