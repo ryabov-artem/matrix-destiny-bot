@@ -45,7 +45,7 @@ from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, FSInputF
 from dotenv import load_dotenv
 from yookassa import Configuration, Payment
 
-load_dotenv("/opt/bots/tarot_bot/.env")
+load_dotenv("/opt/bots/matrix_bot/.env")
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 PROXY_URL = os.getenv("PROXY_URL")
@@ -231,38 +231,6 @@ async def admin_give_balance(message: Message):
         )
     except Exception:
         pass
-
-
-@dp.message(F.text == "🎁 Карта дня")
-async def day_card(message: Message):
-    save_user(message.from_user)
-
-    existing_card = get_today_card(message.from_user.id)
-
-    if existing_card:
-        await message.answer(
-            f"🎴 Твоя карта дня уже была вытянута сегодня.\n\n"
-            f"{existing_card['name']} ({existing_card['orientation']})\n\n"
-            f"{markdown_bold_to_html(existing_card['interpretation'])}\n\n"
-            f"Возвращайся завтра за новой картой.",
-            parse_mode="HTML"
-        )
-        return
-
-    card = draw_card()
-
-    await message.answer("🃏 Перемешиваю колоду...")
-
-    interpretation = interpret_day_card(card)
-
-    save_daily_card(message.from_user.id, card, interpretation)
-
-    photo = FSInputFile(f"/opt/bots/tarot_bot/data/cards/{card['image']}")
-
-    await message.answer_photo(
-        photo=photo,
-        caption=f"🎴 {card['name']} ({card['orientation']})\n\n{interpretation}"
-    )
 
 
 @dp.message(F.text == "💎 Баланс")
