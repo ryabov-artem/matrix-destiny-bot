@@ -53,3 +53,42 @@ def interpret_money_channel(matrix: dict):
     )
 
     return response.output_text
+
+
+def interpret_purpose(matrix: dict):
+    from matrix.prompts import build_purpose_prompt
+
+    prompt = build_purpose_prompt(matrix)
+
+    response = client.responses.create(
+        model="gpt-5.4",
+        input=prompt
+    )
+
+    return response.output_text
+
+
+def interpret_karma(matrix: dict):
+    from matrix.prompts import build_karma_prompt
+
+    prompt = build_karma_prompt(matrix)
+
+    response = client.responses.create(
+        model="gpt-5.4",
+        input=prompt
+    )
+
+    return response.output_text
+
+
+def interpret_child_matrix(matrix: dict):
+    from matrix.prompts import build_child_matrix_prompt
+
+    prompt = build_child_matrix_prompt(matrix)
+
+    response = client.responses.create(
+        model="gpt-5.4",
+        input=prompt
+    )
+
+    return response.output_text
