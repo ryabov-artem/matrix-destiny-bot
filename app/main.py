@@ -416,59 +416,100 @@ async def buy_twenty_spreads(message: Message):
     )
 
 
-@dp.message(F.text == "🌟 Общий расклад")
-async def three_cards_start(message: Message):
+@dp.message(F.text == "✨ Личная матрица")
+async def matrix_personal(message: Message):
     save_user(message.from_user)
-    awaiting_three_card_question.add(message.from_user.id)
-
     await message.answer(
-        "🌟 Напиши свой вопрос для общего расклада.\n\n"
-        "Например:\n"
-        "• Что мне важно понять сейчас?\n"
-        "• Почему ситуация развивается так?\n"
-        "• На что обратить внимание?"
+        "✨ <b>Личная матрица</b>\n\n"
+        "Раздел находится в разработке.\n\n"
+        "В версии 1.0 здесь будет персональный разбор по дате рождения:\n"
+        "• основные энергии матрицы;\n"
+        "• сильные стороны;\n"
+        "• таланты;\n"
+        "• зоны роста;\n"
+        "• жизненные задачи.\n\n"
+        "Скоро здесь появится полноценный анализ ✨",
+        parse_mode="HTML"
     )
 
 
-@dp.message(F.text == "❤️ Отношения")
-async def relationships(message: Message):
+@dp.message(F.text == "❤️ Совместимость")
+async def matrix_compatibility(message: Message):
     save_user(message.from_user)
-    awaiting_relationship_question.add(message.from_user.id)
-
     await message.answer(
-        "❤️ Напиши вопрос для расклада на отношения.\n\n"
-        "Например:\n"
-        "• Что происходит между нами?\n"
-        "• Что он/она чувствует?\n"
-        "• Есть ли перспектива у этих отношений?"
+        "❤️ <b>Совместимость</b>\n\n"
+        "Раздел находится в разработке.\n\n"
+        "В версии 1.0 здесь будет разбор совместимости по двум датам рождения:\n"
+        "• сильные стороны союза;\n"
+        "• возможные напряжения;\n"
+        "• точки роста пары;\n"
+        "• рекомендации для отношений.\n\n"
+        "Скоро здесь появится полноценный анализ ✨",
+        parse_mode="HTML"
     )
 
 
-@dp.message(F.text == "💼 Карьера")
-async def career(message: Message):
+@dp.message(F.text == "👶 Детская матрица")
+async def matrix_child(message: Message):
     save_user(message.from_user)
-    awaiting_career_question.add(message.from_user.id)
-
     await message.answer(
-        "💼 Напиши вопрос для карьерного расклада.\n\n"
-        "Например:\n"
-        "• Стоит ли менять работу?\n"
-        "• Что мешает карьерному росту?\n"
-        "• На что обратить внимание в работе?"
+        "👶 <b>Детская матрица</b>\n\n"
+        "Раздел находится в разработке.\n\n"
+        "В версии 1.0 здесь будет мягкий разбор по дате рождения ребёнка:\n"
+        "• таланты;\n"
+        "• особенности характера;\n"
+        "• сильные стороны;\n"
+        "• рекомендации родителям.\n\n"
+        "Скоро здесь появится полноценный анализ ✨",
+        parse_mode="HTML"
     )
 
 
-@dp.message(F.text == "💰 Деньги")
-async def money(message: Message):
+@dp.message(F.text == "💰 Денежный канал")
+async def matrix_money(message: Message):
     save_user(message.from_user)
-    awaiting_money_question.add(message.from_user.id)
-
     await message.answer(
-        "💰 Напиши вопрос для денежного расклада.\n\n"
-        "Например:\n"
-        "• Что мне важно понять про деньги сейчас?\n"
-        "• Что мешает финансовому росту?\n"
-        "• На что обратить внимание в расходах?"
+        "💰 <b>Денежный канал</b>\n\n"
+        "Раздел находится в разработке.\n\n"
+        "В версии 1.0 здесь будет разбор финансовой энергии по дате рождения:\n"
+        "• сильные стороны в деньгах;\n"
+        "• ограничения;\n"
+        "• повторяющиеся сценарии;\n"
+        "• рекомендации для роста.\n\n"
+        "Скоро здесь появится полноценный анализ ✨",
+        parse_mode="HTML"
+    )
+
+
+@dp.message(F.text == "🎯 Предназначение")
+async def matrix_purpose(message: Message):
+    save_user(message.from_user)
+    await message.answer(
+        "🎯 <b>Предназначение</b>\n\n"
+        "Раздел находится в разработке.\n\n"
+        "В версии 1.0 здесь будет разбор ключевых жизненных задач:\n"
+        "• направления реализации;\n"
+        "• сильные качества;\n"
+        "• внутренние опоры;\n"
+        "• точки развития.\n\n"
+        "Скоро здесь появится полноценный анализ ✨",
+        parse_mode="HTML"
+    )
+
+
+@dp.message(F.text == "🔥 Кармические задачи")
+async def matrix_karma(message: Message):
+    save_user(message.from_user)
+    await message.answer(
+        "🔥 <b>Кармические задачи</b>\n\n"
+        "Раздел находится в разработке.\n\n"
+        "В версии 1.0 здесь будет разбор повторяющихся сценариев и уроков:\n"
+        "• кармические задачи;\n"
+        "• зоны роста;\n"
+        "• внутренние ограничения;\n"
+        "• рекомендации для осознанной проработки.\n\n"
+        "Скоро здесь появится полноценный анализ ✨",
+        parse_mode="HTML"
     )
 
 
