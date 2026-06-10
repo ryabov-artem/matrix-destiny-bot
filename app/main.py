@@ -37,7 +37,6 @@ from database import (
     add_balance
 )
 
-from tarot import draw_card, draw_three_cards
 from matrix.calculator import calculate_personal_matrix
 
 from aiogram import Bot, Dispatcher, F
@@ -815,43 +814,10 @@ async def cancel_broadcast(message: Message):
 
 
 async def process_spread(message: Message, spread_type, intro_text, interpret_func):
-    user_id = message.from_user.id
-
-    if not user_has_spread_access(user_id):
-        await no_access_message(message)
-        return
-
-    question = message.text
-    cards = draw_three_cards()
-
-    await message.answer(intro_text)
-
-    for index, card in enumerate(cards, start=1):
-        photo = FSInputFile(f"/opt/bots/tarot_bot/data/cards/{card['image']}")
-
-        await message.answer_photo(
-            photo=photo,
-            caption=f"{index}. {card['name']} ({card['orientation']})"
-        )
-
-    await message.answer("✨ Готовлю разбор...")
-
-    interpretation = interpret_func(question, cards)
-
-    save_spread(
-        user_id=user_id,
-        spread_type=spread_type,
-        question=question,
-        cards=cards,
-        answer=interpretation
-    )
-
-    charge_user_for_spread(user_id)
-
     await message.answer(
-        f"🔮 {spread_type}\n\n"
-        f"Вопрос:\n{question}\n\n"
-        f"{markdown_bold_to_html(interpretation)}",
+        "✨ <b>Раздел скоро будет доступен</b>\n\n"
+        "Сейчас полноценно работает услуга <b>Личная матрица</b>.\n"
+        "Остальные направления подключим поэтапно.",
         parse_mode="HTML"
     )
 
@@ -901,10 +867,19 @@ async def fallback(message: Message):
         charge_user_for_spread(user_id)
 
         await message.answer(
+        await message.answer(
             f"✨ <b>Личная матрица</b>\n\n"
-            f"Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"🔢 <b>Основные энергии</b>\n\n"
+            f"• День — {matrix['base']['day_arcana']}\n"
+            f"• Месяц — {matrix['base']['month_arcana']}\n"
+            f"• Год — {matrix['base']['year_arcana']}\n"
+            f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
+            f"• Центр личности — {matrix['base']['center_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
             f"{markdown_bold_to_html(interpretation)}",
             parse_mode="HTML"
+        )
         )
         return
 

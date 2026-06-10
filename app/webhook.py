@@ -8,11 +8,11 @@ from dotenv import load_dotenv
 
 from database import add_balance, get_balance, save_payment
 
-load_dotenv("/opt/bots/tarot_bot/.env")
+load_dotenv("/opt/bots/matrix_bot/.env")
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 PROXY_URL = os.getenv("PROXY_URL")
-DB_FILE = "/opt/bots/tarot_bot/data/database.db"
+DB_FILE = "/opt/bots/matrix_bot/data/database.db"
 
 
 def init_payments_table():
@@ -93,10 +93,10 @@ async def yookassa_webhook(request):
     await send_telegram_message(
         user_id,
         f"🎉 Оплата успешно получена\n\n"
-        f"💎 На баланс зачислено: {count} расклад(ов)\n"
-        f"🔮 Текущий баланс: {balance} расклад(ов)\n\n"
-        f"Спасибо за доверие к Аркануму.\n\n"
-        f"✨ Теперь можно выбрать расклад:\n"
+        f"💎 На баланс зачислено: {count} анализ(ов)\n"
+        f"🔮 Текущий баланс: {balance} анализ(ов)\n\n"
+        f"Спасибо за доверие к Матрице судьбы.\n\n"
+        f"✨ Теперь можно выбрать анализ:\n"
         f"• Общий\n"
         f"• Отношения\n"
         f"• Карьера\n"

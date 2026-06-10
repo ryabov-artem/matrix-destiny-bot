@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime, date
 
-DB_FILE = "/opt/bots/tarot_bot/data/database.db"
+DB_FILE = "/opt/bots/matrix_bot/data/database.db"
 
 
 def get_connection():

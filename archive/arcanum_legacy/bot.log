@@ -1,0 +1,737 @@
+Received SIGTERM signal
+Received SIGTERM signal
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 5, in <module>
+    from database import (
+ImportError: cannot import name 'get_users_count' from 'database' (/opt/bots/tarot_bot/app/database.py)
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Cause exception while process update id=529133840 by bot id=8831545088
+NameError: name 'get_spread_type_stats' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 290, in admin_popularity
+    stats = get_spread_type_stats()
+            ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_spread_type_stats' is not defined
+Cause exception while process update id=529133843 by bot id=8831545088
+NameError: name 'get_spread_type_stats' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 290, in admin_popularity
+    stats = get_spread_type_stats()
+            ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_spread_type_stats' is not defined
+Cause exception while process update id=529133845 by bot id=8831545088
+NameError: name 'get_spread_type_stats' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 290, in admin_popularity
+    stats = get_spread_type_stats()
+            ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_spread_type_stats' is not defined
+Received SIGTERM signal
+Cause exception while process update id=529133848 by bot id=8831545088
+NameError: name 'get_spread_type_stats' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 290, in admin_popularity
+    stats = get_spread_type_stats()
+            ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_spread_type_stats' is not defined
+Received SIGTERM signal
+Cause exception while process update id=529133851 by bot id=8831545088
+NameError: name 'get_spread_type_stats' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 291, in admin_popularity
+    stats = get_spread_type_stats()
+            ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_spread_type_stats' is not defined
+Received SIGTERM signal
+Cause exception while process update id=529133855 by bot id=8831545088
+NameError: name 'get_spread_type_stats' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 291, in admin_popularity
+    stats = get_spread_type_stats()
+            ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_spread_type_stats' is not defined
+Cause exception while process update id=529133857 by bot id=8831545088
+NameError: name 'get_spread_type_stats' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 291, in admin_popularity
+    stats = get_spread_type_stats()
+            ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_spread_type_stats' is not defined
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8831545088)
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8831545088)
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [Errno 1] [SSL: DECRYPTION_FAILED_OR_BAD_RECORD_MAC] decryption failed or bad record mac (_ssl.c:2559)
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8831545088)
+Received SIGTERM signal
+Cause exception while process update id=529133961 by bot id=8831545088
+NameError: name 'shop_keyboard' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 229, in balance
+    reply_markup=shop_keyboard
+                 ^^^^^^^^^^^^^
+NameError: name 'shop_keyboard' is not defined. Did you mean: 'admin_keyboard'?
+Cause exception while process update id=529133963 by bot id=8831545088
+NameError: name 'shop_keyboard' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 229, in balance
+    reply_markup=shop_keyboard
+                 ^^^^^^^^^^^^^
+NameError: name 'shop_keyboard' is not defined. Did you mean: 'admin_keyboard'?
+Received SIGTERM signal
+Cause exception while process update id=529133965 by bot id=8831545088
+NameError: name 'shop_keyboard' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 229, in balance
+    reply_markup=shop_keyboard
+                 ^^^^^^^^^^^^^
+NameError: name 'shop_keyboard' is not defined. Did you mean: 'admin_keyboard'?
+Cause exception while process update id=529133966 by bot id=8831545088
+NameError: name 'shop_keyboard' is not defined
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 165, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 157, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 185, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/opt/bots/tarot_bot/app/main.py", line 229, in balance
+    reply_markup=shop_keyboard
+                 ^^^^^^^^^^^^^
+NameError: name 'shop_keyboard' is not defined. Did you mean: 'admin_keyboard'?
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+Traceback (most recent call last):
+  File "/opt/bots/tarot_bot/app/main.py", line 103, in <module>
+    [KeyboardButton(text="🏆 Топ")]
+TypeError: list indices must be integers or slices, not KeyboardButton
+  File "/opt/bots/tarot_bot/app/main.py", line 102
+    [KeyboardButton(text="📈 Воронка")],,
+                                       ^
+SyntaxError: invalid syntax
+  File "/opt/bots/tarot_bot/app/main.py", line 102
+    [KeyboardButton(text="📈 Воронка")],,
+                                       ^
+SyntaxError: invalid syntax
+  File "/opt/bots/tarot_bot/app/main.py", line 102
+    [KeyboardButton(text="📈 Воронка")],,
+                                       ^
+SyntaxError: invalid syntax
+  File "/opt/bots/tarot_bot/app/main.py", line 102
+    [KeyboardButton(text="📈 Воронка")],,
+                                       ^
+SyntaxError: invalid syntax
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Received SIGTERM signal
+Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8831545088)
+Received SIGTERM signal
