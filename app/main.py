@@ -570,7 +570,7 @@ async def admin_stats(message: Message):
     await message.answer(
         "📈 Статистика Matrix\n\n"
         f"👥 Пользователей: {get_users_count()}\n"
-        f"📜 Анализов: {get_spreads_count()}\n"
+        f"📜 Разборов: {get_spreads_count()}\n"
         f"💎 Формат: платные разборы по балансу"
     )
 
@@ -612,7 +612,7 @@ async def admin_recent_spreads(message: Message):
     spreads = get_recent_spreads(limit=10)
 
     if not spreads:
-        await message.answer("Анализов пока нет.")
+        await message.answer("Разборов пока нет.")
         return
 
     text = "📜 Последние разборы:\n\n"
@@ -965,7 +965,7 @@ async def fallback(message: Message):
             awaiting_money_channel_date.add(user_id)
             return
 
-        await message.answer("💰 Рассчитываю денежный канал...")
+        await message.answer("💰 Рассчитываю денежный кразборов..")
 
         try:
             interpretation = interpret_money_channel(matrix)
