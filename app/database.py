@@ -8,6 +8,27 @@ def get_connection():
     return sqlite3.connect(DB_FILE)
 
 
+
+def ensure_payments_table():
+    ensure_payments_table()
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS payments (
+        payment_id TEXT PRIMARY KEY,
+        user_id INTEGER,
+        amount REAL,
+        spreads_added INTEGER,
+        created_at TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
 def init_db():
     conn = get_connection()
     cursor = conn.cursor()
@@ -544,26 +565,30 @@ def get_sales_funnel():
     cursor.execute("SELECT COUNT(*) FROM users")
     users_count = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(DISTINCT user_id) FROM daily_cards")
-    daily_card_users = cursor.fetchone()[0]
-
     cursor.execute("SELECT COUNT(DISTINCT user_id) FROM spreads")
-    spread_users = cursor.fetchone()[0]
+    analysis_users = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM spreads")
+    analyses_count = cursor.fetchone()[0]
 
     cursor.execute("SELECT COUNT(DISTINCT user_id) FROM payments")
     paying_users = cursor.fetchone()[0]
 
-    conversion_to_spread = round((spread_users / users_count * 100), 1) if users_count else 0
+    cursor.execute("SELECT COUNT(*) FROM payments")
+    payments_count = cursor.fetchone()[0]
+
+    conversion_to_analysis = round((analysis_users / users_count * 100), 1) if users_count else 0
     conversion_to_payment = round((paying_users / users_count * 100), 1) if users_count else 0
 
     conn.close()
 
     return {
         "users_count": users_count,
-        "daily_card_users": daily_card_users,
-        "spread_users": spread_users,
+        "analysis_users": analysis_users,
+        "analyses_count": analyses_count,
         "paying_users": paying_users,
-        "conversion_to_spread": conversion_to_spread,
+        "payments_count": payments_count,
+        "conversion_to_analysis": conversion_to_analysis,
         "conversion_to_payment": conversion_to_payment,
     }
 

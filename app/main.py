@@ -5,7 +5,8 @@ import re
 
 from ai import (
     interpret_personal_matrix,
-    interpret_compatibility
+    interpret_compatibility,
+    interpret_money_channel
 )
 
 from database import (
@@ -67,6 +68,7 @@ awaiting_career_question = set()
 awaiting_money_question = set()
 awaiting_personal_matrix_date = set()
 awaiting_compatibility_dates = set()
+awaiting_money_channel_date = set()
 awaiting_broadcast_text = set()
 pending_broadcast = {}
 
@@ -130,7 +132,7 @@ broadcast_confirm_keyboard = ReplyKeyboardMarkup(
 promo_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="🎁 Акция: 5 анализов")],
-        [KeyboardButton(text="🔮 Напомнить про карту дня")],
+        [KeyboardButton(text="✨ Напомнить про личную матрицу")],
         [KeyboardButton(text="💰 Скидка на анализы")],
         [KeyboardButton(text="⬅️ Назад")]
     ],
@@ -442,15 +444,19 @@ async def matrix_child(message: Message):
 @dp.message(F.text == "💰 Денежный канал")
 async def matrix_money(message: Message):
     save_user(message.from_user)
+    user_id = message.from_user.id
+
+    if not user_has_spread_access(user_id):
+        await no_access_message(message)
+        return
+
+    awaiting_money_channel_date.add(user_id)
+
     await message.answer(
         "💰 <b>Денежный канал</b>\n\n"
-        "Раздел находится в разработке.\n\n"
-        "В версии 1.0 здесь будет разбор финансовой энергии по дате рождения:\n"
-        "• сильные стороны в деньгах;\n"
-        "• ограничения;\n"
-        "• повторяющиеся сценарии;\n"
-        "• рекомендации для роста.\n\n"
-        "Скоро здесь появится полноценный анализ ✨",
+        "Введите дату рождения в формате:\n\n"
+        "<b>ДД.ММ.ГГГГ</b>\n\n"
+        "Например: <b>29.05.1995</b>",
         parse_mode="HTML"
     )
 
@@ -504,9 +510,9 @@ async def history(message: Message):
 
     for spread in spreads:
         text += (
-            f"🔮 #{spread['id']} — {spread['spread_type']}\n"
+            f"✨ #{spread['id']} — {spread['spread_type']}\n"
             f"Вопрос: {spread['question']}\n"
-            f"Энергии: {spread['cards']}\n\n"
+            f"Данные: {spread['cards']}\n\n"
         )
 
     await message.answer(text)
@@ -544,10 +550,10 @@ async def admin_stats(message: Message):
         return
 
     await message.answer(
-        "📈 Статистика\n\n"
+        "📈 Статистика Matrix\n\n"
         f"👥 Пользователей: {get_users_count()}\n"
-        f"🎁 Карт дня: {get_daily_cards_count()}\n"
-        f"🔮 Раскладов: {get_spreads_count()}"
+        f"📜 Анализов: {get_spreads_count()}\n"
+        f"💎 Формат: платные анализы по балансу"
     )
 
 
@@ -588,7 +594,7 @@ async def admin_recent_spreads(message: Message):
     spreads = get_recent_spreads(limit=10)
 
     if not spreads:
-        await message.answer("Раскладов пока нет.")
+        await message.answer("Анализов пока нет.")
         return
 
     text = "📜 Последние анализы:\n\n"
@@ -662,7 +668,7 @@ async def promo_five_spreads(message: Message):
     )
 
 
-@dp.message(F.text == "🔮 Напомнить про карту дня")
+@dp.message(F.text == "✨ Напомнить про личную матрицу")
 async def promo_daily_card(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
@@ -670,7 +676,7 @@ async def promo_daily_card(message: Message):
     pending_broadcast[message.from_user.id] = (
         "✨ <b>Личная матрица уже ждёт вас</b>\n\n"
         "Откройте Матрицу судьбы и выберите подходящий разбор.\n\n"
-        "Иногда одна карта помогает увидеть день чуть яснее ✨"
+        "Один разбор может подсветить сильные стороны, отношения и направление движения ✨"
     )
 
     await message.answer(
@@ -715,10 +721,12 @@ async def admin_sales_funnel(message: Message):
     await message.answer(
         "📈 Воронка продаж\n\n"
         f"👥 Пользователей всего: {funnel['users_count']}\n"
-        f"🔮 Получили карту дня: {funnel['daily_card_users']}\n"
-        f"📜 Сделали анализ: {funnel['spread_users']}\n"
-        f"💰 Совершили покупку: {funnel['paying_users']}\n\n"
-        f"📜 Конверсия в анализ: {funnel['conversion_to_spread']}%\n"
+        
+        f"📜 Пользователей с анализами: {funnel['analysis_users']}\n"
+        f"📊 Всего анализов: {funnel['analyses_count']}\n"
+        f"💰 Совершили покупку: {funnel['paying_users']}\n"
+        f"🧾 Всего платежей: {funnel['payments_count']}\n\n"
+        f"📜 Конверсия в анализ: {funnel['conversion_to_analysis']}%\n"
         f"💰 Конверсия в покупку: {funnel['conversion_to_payment']}%"
     )
 
@@ -740,7 +748,7 @@ async def admin_top_users(message: Message):
             name = user["username"] or user["first_name"] or str(user["user_id"])
             text += (
                 f"{i}. {name} — {user['total_amount']} ₽ "
-                f"({user['payments_count']} платеж., {user['total_spreads']} раскл.)\n"
+                f"({user['payments_count']} платеж., {user['total_spreads']} анал.)\n"
             )
     else:
         text += "Пока нет покупок.\n"
@@ -749,7 +757,7 @@ async def admin_top_users(message: Message):
     if data["top_spreads"]:
         for i, user in enumerate(data["top_spreads"], start=1):
             name = user["username"] or user["first_name"] or str(user["user_id"])
-            text += f"{i}. {name} — {user['spreads_count']} раскл.\n"
+            text += f"{i}. {name} — {user['spreads_count']} анал.\n"
     else:
         text += "Пока нет анализов.\n"
 
@@ -836,6 +844,48 @@ async def fallback(message: Message):
             f"{message.text}\n\n"
             "Отправить?",
             reply_markup=broadcast_confirm_keyboard
+        )
+        return
+
+    if user_id in awaiting_money_channel_date:
+        awaiting_money_channel_date.remove(user_id)
+
+        try:
+            matrix = calculate_personal_matrix(message.text)
+        except ValueError as e:
+            await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз: например, 29.05.1995")
+            awaiting_money_channel_date.add(user_id)
+            return
+
+        await message.answer("💰 Рассчитываю денежный канал...")
+
+        try:
+            interpretation = interpret_money_channel(matrix)
+        except Exception as e:
+            await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
+            return
+
+        save_spread(
+            user_id=user_id,
+            spread_type="Денежный канал",
+            question=matrix["birth_date"],
+            cards=[],
+            answer=interpretation
+        )
+
+        charge_user_for_spread(user_id)
+
+        await message.answer(
+            f"💰 <b>Денежный канал</b>\n\n"
+            f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"🔢 <b>Ключевые энергии</b>\n\n"
+            f"• Денежный канал — {matrix['channels']['money_arcana']}\n"
+            f"• Таланты — {matrix['channels']['talent_arcana']}\n"
+            f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
+            f"• Центр личности — {matrix['base']['center_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML"
         )
         return
 

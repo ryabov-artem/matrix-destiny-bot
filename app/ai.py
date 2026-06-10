@@ -40,3 +40,16 @@ def interpret_compatibility(data: dict):
     )
 
     return response.output_text
+
+
+def interpret_money_channel(matrix: dict):
+    from matrix.prompts import build_money_channel_prompt
+
+    prompt = build_money_channel_prompt(matrix)
+
+    response = client.responses.create(
+        model="gpt-5.4",
+        input=prompt
+    )
+
+    return response.output_text
