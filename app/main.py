@@ -76,6 +76,8 @@ awaiting_money_channel_date = set()
 awaiting_purpose_date = set()
 awaiting_karma_date = set()
 awaiting_broadcast_text = set()
+awaiting_balance_grant = set()
+awaiting_balance_writeoff = set()
 pending_broadcast = {}
 
 
@@ -107,6 +109,8 @@ admin_keyboard = ReplyKeyboardMarkup(
         [KeyboardButton(text="🎁 Акции")],
         [KeyboardButton(text="📈 Воронка")],
         [KeyboardButton(text="🏆 Топ")],
+        [KeyboardButton(text="➕ Начислить баланс")],
+        [KeyboardButton(text="➖ Списать баланс")],
         [KeyboardButton(text="⬅️ Назад")]
     ],
     resize_keyboard=True
@@ -863,6 +867,90 @@ async def process_spread(message: Message, spread_type, intro_text, interpret_fu
         "Сейчас полноценно работает услуга <b>Личная матрица</b>.\n"
         "Остальные направления подключим поэтапно.",
         parse_mode="HTML"
+    )
+
+
+
+@dp.message(F.text == "➕ Начислить баланс")
+async def admin_balance_grant_start(message: Message):
+    if message.from_user.id != ADMIN_ID:
+        await message.answer("Нет доступа.")
+        return
+    awaiting_balance_grant.add(message.from_user.id)
+    await message.answer("Введите USER_ID и количество разборов:\n\nПример:\n185955220 5")
+
+
+@dp.message(F.text == "➖ Списать баланс")
+async def admin_balance_writeoff_start(message: Message):
+    if message.from_user.id != ADMIN_ID:
+        await message.answer("Нет доступа.")
+        return
+    awaiting_balance_writeoff.add(message.from_user.id)
+    await message.answer("Введите USER_ID и количество разборов для списания:\n\nПример:\n185955220 5")
+
+
+@dp.message(lambda message: message.from_user.id in awaiting_balance_grant)
+async def admin_balance_grant_process(message: Message):
+    awaiting_balance_grant.discard(message.from_user.id)
+
+    try:
+        target_user_id, amount = map(int, message.text.split())
+    except Exception:
+        await message.answer("Неверный формат. Пример: 185955220 5", reply_markup=admin_keyboard)
+        return
+
+    if amount <= 0:
+        await message.answer("Количество должно быть больше 0.", reply_markup=admin_keyboard)
+        return
+
+    add_balance(target_user_id, amount)
+
+    await message.answer(
+        f"✅ Начислено {amount} разбор(ов).\nПользователь: {target_user_id}",
+        reply_markup=admin_keyboard
+    )
+
+    try:
+        await bot.send_message(
+            chat_id=target_user_id,
+            text=(
+                f"💎 Вам начислено: {amount} разбор(ов).\n\n"
+                f"✨ Выберите интересующий раздел в меню."
+            )
+        )
+    except Exception:
+        pass
+
+
+@dp.message(lambda message: message.from_user.id in awaiting_balance_writeoff)
+async def admin_balance_writeoff_process(message: Message):
+    awaiting_balance_writeoff.discard(message.from_user.id)
+
+    try:
+        target_user_id, amount = map(int, message.text.split())
+    except Exception:
+        await message.answer("Неверный формат. Пример: 185955220 5", reply_markup=admin_keyboard)
+        return
+
+    if amount <= 0:
+        await message.answer("Количество должно быть больше 0.", reply_markup=admin_keyboard)
+        return
+
+    current_balance = get_balance(target_user_id)
+
+    if current_balance < amount:
+        await message.answer(
+            f"Недостаточно разборов на балансе. Сейчас: {current_balance}",
+            reply_markup=admin_keyboard
+        )
+        return
+
+    for _ in range(amount):
+        spend_balance(target_user_id)
+
+    await message.answer(
+        f"✅ Списано {amount} разбор(ов).\nПользователь: {target_user_id}",
+        reply_markup=admin_keyboard
     )
 
 
