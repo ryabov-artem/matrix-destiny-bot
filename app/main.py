@@ -42,6 +42,8 @@ from matrix.calculator import calculate_personal_matrix, calculate_compatibility
 from aiogram import Bot, Dispatcher, F
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.filters import CommandStart
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
 from yookassa import Configuration, Payment
@@ -64,6 +66,22 @@ ADMIN_ID = 185955220
 session = AiohttpSession(proxy=PROXY_URL)
 bot = Bot(token=BOT_TOKEN, session=session)
 dp = Dispatcher()
+
+
+class MatrixStates(StatesGroup):
+    awaiting_personal_matrix_date = State()
+    awaiting_compatibility_dates = State()
+    awaiting_child_matrix_date = State()
+    awaiting_money_channel_date = State()
+    awaiting_purpose_date = State()
+    awaiting_karma_date = State()
+
+
+class AdminStates(StatesGroup):
+    awaiting_broadcast_text = State()
+    awaiting_balance_grant = State()
+    awaiting_balance_writeoff = State()
+
 
 awaiting_three_card_question = set()
 awaiting_relationship_question = set()
@@ -418,16 +436,16 @@ async def buy_twenty_spreads(message: Message):
 
 
 @dp.message(F.text == "✨ Личная матрица")
-async def matrix_personal(message: Message):
+async def matrix_personal(message: Message, state: FSMContext):
     await save_user(message.from_user)
     user_id = message.from_user.id
 
-    if not user_has_spread_access(user_id):
+    if not await user_has_spread_access(user_id):
         await no_access_message(message)
         return
 
     clear_user_waiting_states(user_id)
-    awaiting_personal_matrix_date.add(user_id)
+    await state.set_state(MatrixStates.awaiting_personal_matrix_date)
 
     await message.answer(
         "✨ <b>Личная матрица</b>\n\n"
@@ -972,6 +990,54 @@ async def admin_balance_writeoff_process(message: Message):
         f"✅ Списано {amount} разбор(ов).\nПользователь: {target_user_id}",
         reply_markup=admin_keyboard
     )
+
+
+
+@dp.message(MatrixStates.awaiting_personal_matrix_date)
+async def process_personal_matrix_date(message: Message, state: FSMContext):
+    user_id = message.from_user.id
+
+    try:
+        matrix = calculate_personal_matrix(message.text)
+    except ValueError as e:
+        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+        return
+
+    await message.answer("✨ Рассчитываю вашу личную матрицу...")
+    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+
+    try:
+        interpretation = interpret_personal_matrix(matrix)
+    except Exception as e:
+        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
+        return
+
+    await save_spread(
+        user_id=user_id,
+        spread_type="Личная матрица",
+        question=matrix["birth_date"],
+        cards=[],
+        answer=interpretation
+    )
+
+    await charge_user_for_spread(user_id)
+
+    await message.answer(
+        f"✨ <b>Личная матрица</b>\n\n"
+        f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+        f"🔢 <b>Основные энергии</b>\n\n"
+        f"• День — {matrix['base']['day_arcana']}\n"
+        f"• Месяц — {matrix['base']['month_arcana']}\n"
+        f"• Год — {matrix['base']['year_arcana']}\n"
+        f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
+        f"• Центр личности — {matrix['base']['center_arcana']}\n\n"
+        f"━━━━━━━━━━\n\n"
+        f"{markdown_bold_to_html(interpretation)}",
+        parse_mode="HTML"
+    )
+
+    await state.clear()
+
 
 
 @dp.message()
