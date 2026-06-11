@@ -238,8 +238,9 @@ async def admin_give_balance(message: Message):
         await bot.send_message(
             chat_id=target_user_id,
             text=(
-                f"💎 Тебе начислено {amount} разбор(ов).\n\n"
-                "Можешь использовать их в любом платном разборе."
+                f"💎 Оплата успешно получена!\n\n"
+                f"На баланс зачислено: {amount} разбор(ов).\n\n"
+                f"✨ Выберите интересующий раздел в меню."
             )
         )
     except Exception:
