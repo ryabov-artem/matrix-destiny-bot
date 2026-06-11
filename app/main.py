@@ -456,16 +456,16 @@ async def matrix_personal(message: Message, state: FSMContext):
 
 
 @dp.message(F.text == "❤️ Совместимость")
-async def matrix_compatibility(message: Message):
+async def matrix_compatibility(message: Message, state: FSMContext):
     await save_user(message.from_user)
     user_id = message.from_user.id
 
-    if not user_has_spread_access(user_id):
+    if not await user_has_spread_access(user_id):
         await no_access_message(message)
         return
 
     clear_user_waiting_states(user_id)
-    awaiting_compatibility_dates.add(user_id)
+    await state.set_state(MatrixStates.awaiting_compatibility_dates)
 
     await message.answer(
         "❤️ <b>Совместимость</b>\n\n"
@@ -477,16 +477,16 @@ async def matrix_compatibility(message: Message):
 
 
 @dp.message(F.text == "👶 Детская матрица")
-async def matrix_child(message: Message):
+async def matrix_child(message: Message, state: FSMContext):
     await save_user(message.from_user)
     user_id = message.from_user.id
 
-    if not user_has_spread_access(user_id):
+    if not await user_has_spread_access(user_id):
         await no_access_message(message)
         return
 
     clear_user_waiting_states(user_id)
-    awaiting_child_matrix_date.add(user_id)
+    await state.set_state(MatrixStates.awaiting_child_matrix_date)
 
     await message.answer(
         "👶 <b>Детская матрица</b>\n\n"
@@ -1031,6 +1031,122 @@ async def process_personal_matrix_date(message: Message, state: FSMContext):
         f"• Год — {matrix['base']['year_arcana']}\n"
         f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
         f"• Центр личности — {matrix['base']['center_arcana']}\n\n"
+        f"━━━━━━━━━━\n\n"
+        f"{markdown_bold_to_html(interpretation)}",
+        parse_mode="HTML"
+    )
+
+    await state.clear()
+
+
+
+
+@dp.message(MatrixStates.awaiting_compatibility_dates)
+async def process_compatibility_dates(message: Message, state: FSMContext):
+    user_id = message.from_user.id
+
+    dates = [line.strip() for line in message.text.splitlines() if line.strip()]
+
+    if len(dates) != 2:
+        await message.answer(
+            "⚠️ Нужно ввести ровно две даты, каждую с новой строки.\n\n"
+            "ДД.ММ.ГГГГ\n"
+            "ДД.ММ.ГГГГ"
+        )
+        return
+
+    try:
+        compatibility = calculate_compatibility_matrix(dates[0], dates[1])
+    except ValueError as e:
+        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз.")
+        return
+
+    await message.answer("❤️ Рассчитываю совместимость...")
+    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+
+    try:
+        interpretation = interpret_compatibility(compatibility)
+    except Exception as e:
+        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
+        return
+
+    await save_spread(
+        user_id=user_id,
+        spread_type="Совместимость",
+        question=f"{compatibility['date1']} + {compatibility['date2']}",
+        cards=[],
+        answer=interpretation
+    )
+
+    await charge_user_for_spread(user_id)
+
+    await message.answer(
+        f"❤️ <b>Совместимость</b>\n\n"
+        f"👤 Партнер 1: <b>{compatibility['date1']}</b>\n"
+        f"👤 Партнер 2: <b>{compatibility['date2']}</b>\n\n"
+        f"🔢 <b>Энергии союза</b>\n\n"
+        f"• Центр пары — {compatibility['pair']['center_arcana']}\n"
+        f"• Предназначение пары — {compatibility['pair']['destiny_arcana']}\n"
+        f"• Канал отношений — {compatibility['pair']['relationship_arcana']}\n\n"
+        f"━━━━━━━━━━\n\n"
+        f"{markdown_bold_to_html(interpretation)}",
+        parse_mode="HTML"
+    )
+
+    await state.clear()
+
+
+
+
+@dp.message(MatrixStates.awaiting_child_matrix_date)
+async def process_child_matrix_date(message: Message, state: FSMContext):
+    user_id = message.from_user.id
+
+    try:
+        matrix = calculate_personal_matrix(message.text)
+    except ValueError as e:
+        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+        return
+
+    from datetime import datetime
+    birth_date = datetime.strptime(matrix["birth_date"], "%d.%m.%Y").date()
+    today = datetime.now().date()
+    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+    if age > 18:
+        await message.answer(
+            "⚠️ Для детской матрицы укажите дату рождения ребёнка до 18 лет.\n\n"
+            "Для взрослых используйте раздел «✨ Личная матрица»."
+        )
+        return
+
+    await message.answer("👶 Рассчитываю детскую матрицу...")
+    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+
+    try:
+        interpretation = interpret_child_matrix(matrix)
+    except Exception as e:
+        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
+        return
+
+    await save_spread(
+        user_id=user_id,
+        spread_type="Детская матрица",
+        question=matrix["birth_date"],
+        cards=[],
+        answer=interpretation
+    )
+
+    await charge_user_for_spread(user_id)
+
+    await message.answer(
+        f"👶 <b>Детская матрица</b>\n\n"
+        f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+        f"🔢 <b>Ключевые энергии</b>\n\n"
+        f"• Центр личности — {matrix['base']['center_arcana']}\n"
+        f"• Таланты — {matrix['channels']['talent_arcana']}\n"
+        f"• Отношения — {matrix['channels']['relationship_arcana']}\n"
+        f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n\n"
         f"━━━━━━━━━━\n\n"
         f"{markdown_bold_to_html(interpretation)}",
         parse_mode="HTML"
