@@ -1064,7 +1064,7 @@ async def fallback(message: Message):
             awaiting_money_channel_date.add(user_id)
             return
 
-        await message.answer("💰 Рассчитываю денежный кразборов..")
+        await message.answer("💰 Рассчитываю денежный канал...")
 
         try:
             interpretation = interpret_money_channel(matrix)
