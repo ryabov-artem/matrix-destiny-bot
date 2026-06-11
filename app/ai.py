@@ -22,7 +22,7 @@ def interpret_personal_matrix(matrix: dict):
     prompt = build_personal_matrix_prompt(matrix)
 
     response = client.responses.create(
-        model="gpt-5.4-mini-mini",
+        model="gpt-5.4-mini",
         input=prompt
     )
 
@@ -35,7 +35,7 @@ def interpret_compatibility(data: dict):
     prompt = build_compatibility_prompt(data)
 
     response = client.responses.create(
-        model="gpt-5.4-mini-mini",
+        model="gpt-5.4-mini",
         input=prompt
     )
 
@@ -48,7 +48,7 @@ def interpret_money_channel(matrix: dict):
     prompt = build_money_channel_prompt(matrix)
 
     response = client.responses.create(
-        model="gpt-5.4-mini-mini",
+        model="gpt-5.4-mini",
         input=prompt
     )
 
@@ -61,7 +61,7 @@ def interpret_purpose(matrix: dict):
     prompt = build_purpose_prompt(matrix)
 
     response = client.responses.create(
-        model="gpt-5.4-mini-mini",
+        model="gpt-5.4-mini",
         input=prompt
     )
 
@@ -74,7 +74,7 @@ def interpret_karma(matrix: dict):
     prompt = build_karma_prompt(matrix)
 
     response = client.responses.create(
-        model="gpt-5.4-mini-mini",
+        model="gpt-5.4-mini",
         input=prompt
     )
 
@@ -87,7 +87,7 @@ def interpret_child_matrix(matrix: dict):
     prompt = build_child_matrix_prompt(matrix)
 
     response = client.responses.create(
-        model="gpt-5.4-mini-mini",
+        model="gpt-5.4-mini",
         input=prompt
     )
 

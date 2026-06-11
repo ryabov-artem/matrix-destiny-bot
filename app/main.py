@@ -82,6 +82,7 @@ pending_broadcast = {}
 
 
 def markdown_bold_to_html(text):
+    text = text.replace("<br>", "\n").replace("<br/>", "\n").replace("<br />", "\n")
     return re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", text)
 
 
@@ -101,16 +102,11 @@ def get_main_keyboard(user_id):
 
 admin_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="👥 Пользователи")],
-        [KeyboardButton(text="📈 Статистика")],
-        [KeyboardButton(text="📜 Последние разборы")],
-        [KeyboardButton(text="📊 Популярность")],
-        [KeyboardButton(text="📣 Рассылка")],
-        [KeyboardButton(text="🎁 Акции")],
-        [KeyboardButton(text="📈 Воронка")],
-        [KeyboardButton(text="🏆 Топ")],
-        [KeyboardButton(text="➕ Начислить баланс")],
-        [KeyboardButton(text="➖ Списать баланс")],
+        [KeyboardButton(text="👥 Пользователи"), KeyboardButton(text="📈 Статистика")],
+        [KeyboardButton(text="📜 Последние разборы"), KeyboardButton(text="📊 Популярность")],
+        [KeyboardButton(text="📣 Рассылка"), KeyboardButton(text="🎁 Акции")],
+        [KeyboardButton(text="📈 Воронка"), KeyboardButton(text="🏆 Топ")],
+        [KeyboardButton(text="➕ Начислить баланс"), KeyboardButton(text="➖ Списать баланс")],
         [KeyboardButton(text="⬅️ Назад")]
     ],
     resize_keyboard=True
@@ -170,6 +166,19 @@ def charge_user_for_spread(user_id):
         spend_balance(user_id)
 
 
+def clear_user_waiting_states(user_id):
+    awaiting_personal_matrix_date.discard(user_id)
+    awaiting_compatibility_dates.discard(user_id)
+    awaiting_child_matrix_date.discard(user_id)
+    awaiting_money_channel_date.discard(user_id)
+    awaiting_purpose_date.discard(user_id)
+    awaiting_karma_date.discard(user_id)
+    awaiting_broadcast_text.discard(user_id)
+    awaiting_balance_grant.discard(user_id)
+    awaiting_balance_writeoff.discard(user_id)
+    pending_broadcast.pop(user_id, None)
+
+
 async def no_access_message(message: Message):
     await message.answer(
         "💎 Бесплатный разбор уже использован.\n\n"
@@ -185,6 +194,7 @@ async def no_access_message(message: Message):
 @dp.message(CommandStart())
 async def start(message: Message):
     save_user(message.from_user)
+    clear_user_waiting_states(message.from_user.id)
 
     await message.answer(
         "✨ Матрица судьбы\n\n"
@@ -416,6 +426,7 @@ async def matrix_personal(message: Message):
         await no_access_message(message)
         return
 
+    clear_user_waiting_states(user_id)
     awaiting_personal_matrix_date.add(user_id)
 
     await message.answer(
@@ -435,6 +446,7 @@ async def matrix_compatibility(message: Message):
         await no_access_message(message)
         return
 
+    clear_user_waiting_states(user_id)
     awaiting_compatibility_dates.add(user_id)
 
     await message.answer(
@@ -455,6 +467,7 @@ async def matrix_child(message: Message):
         await no_access_message(message)
         return
 
+    clear_user_waiting_states(user_id)
     awaiting_child_matrix_date.add(user_id)
 
     await message.answer(
@@ -474,6 +487,7 @@ async def matrix_money(message: Message):
         await no_access_message(message)
         return
 
+    clear_user_waiting_states(user_id)
     awaiting_money_channel_date.add(user_id)
 
     await message.answer(
@@ -493,6 +507,7 @@ async def matrix_purpose(message: Message):
         await no_access_message(message)
         return
 
+    clear_user_waiting_states(user_id)
     awaiting_purpose_date.add(user_id)
 
     await message.answer(
@@ -512,6 +527,7 @@ async def matrix_karma(message: Message):
         await no_access_message(message)
         return
 
+    clear_user_waiting_states(user_id)
     awaiting_karma_date.add(user_id)
 
     await message.answer(
@@ -561,6 +577,8 @@ async def about(message: Message):
 
 @dp.message(F.text == "⚙️ Админка")
 async def admin_panel(message: Message):
+    clear_user_waiting_states(message.from_user.id)
+
     if message.from_user.id != ADMIN_ID:
         await message.answer("Нет доступа.")
         return
@@ -570,6 +588,8 @@ async def admin_panel(message: Message):
 
 @dp.message(F.text == "⬅️ Назад")
 async def back_to_main(message: Message):
+    clear_user_waiting_states(message.from_user.id)
+
     await message.answer(
         "Главное меню",
         reply_markup=get_main_keyboard(message.from_user.id)
@@ -977,6 +997,7 @@ async def fallback(message: Message):
             matrix = calculate_personal_matrix(message.text)
         except ValueError as e:
             await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            clear_user_waiting_states(user_id)
             awaiting_karma_date.add(user_id)
             return
 
@@ -1019,6 +1040,7 @@ async def fallback(message: Message):
             matrix = calculate_personal_matrix(message.text)
         except ValueError as e:
             await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            clear_user_waiting_states(user_id)
             awaiting_purpose_date.add(user_id)
             return
 
@@ -1061,6 +1083,7 @@ async def fallback(message: Message):
             matrix = calculate_personal_matrix(message.text)
         except ValueError as e:
             await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            clear_user_waiting_states(user_id)
             awaiting_money_channel_date.add(user_id)
             return
 
@@ -1103,6 +1126,21 @@ async def fallback(message: Message):
             matrix = calculate_personal_matrix(message.text)
         except ValueError as e:
             await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            clear_user_waiting_states(user_id)
+            awaiting_child_matrix_date.add(user_id)
+            return
+
+        from datetime import datetime
+        birth_date = datetime.strptime(matrix["birth_date"], "%d.%m.%Y").date()
+        today = datetime.now().date()
+        age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+        if age > 18:
+            await message.answer(
+                "⚠️ Для детской матрицы укажите дату рождения ребёнка до 18 лет.\n\n"
+                "Для взрослых используйте раздел «✨ Личная матрица»."
+            )
+            clear_user_waiting_states(user_id)
             awaiting_child_matrix_date.add(user_id)
             return
 
@@ -1149,6 +1187,7 @@ async def fallback(message: Message):
                 "ДД.ММ.ГГГГ\n"
                 "ДД.ММ.ГГГГ"
             )
+            clear_user_waiting_states(user_id)
             awaiting_compatibility_dates.add(user_id)
             return
 
@@ -1156,6 +1195,7 @@ async def fallback(message: Message):
             compatibility = calculate_compatibility_matrix(dates[0], dates[1])
         except ValueError as e:
             await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз.")
+            clear_user_waiting_states(user_id)
             awaiting_compatibility_dates.add(user_id)
             return
 
@@ -1198,6 +1238,7 @@ async def fallback(message: Message):
             matrix = calculate_personal_matrix(message.text)
         except ValueError as e:
             await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            clear_user_waiting_states(user_id)
             awaiting_personal_matrix_date.add(user_id)
             return
 
