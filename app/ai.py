@@ -1,27 +1,29 @@
 import os
 import httpx
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import AsyncOpenAI
 
 load_dotenv("/opt/bots/matrix_bot/.env")
 
 PROXY_URL = os.getenv("PROXY_URL")
 
-client = OpenAI(
+http_client = httpx.AsyncClient(
+    proxy=PROXY_URL,
+    timeout=180.0
+)
+
+client = AsyncOpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
-    http_client=httpx.Client(
-        proxy=PROXY_URL,
-        timeout=180.0
-    )
+    http_client=http_client
 )
 
 
-def interpret_personal_matrix(matrix: dict):
+async def interpret_personal_matrix(matrix: dict):
     from matrix.prompts import build_personal_matrix_prompt
 
     prompt = build_personal_matrix_prompt(matrix)
 
-    response = client.responses.create(
+    response = await client.responses.create(
         model="gpt-5.4-mini",
         input=prompt
     )
@@ -29,12 +31,12 @@ def interpret_personal_matrix(matrix: dict):
     return response.output_text
 
 
-def interpret_compatibility(data: dict):
+async def interpret_compatibility(data: dict):
     from matrix.prompts import build_compatibility_prompt
 
     prompt = build_compatibility_prompt(data)
 
-    response = client.responses.create(
+    response = await client.responses.create(
         model="gpt-5.4-mini",
         input=prompt
     )
@@ -42,12 +44,12 @@ def interpret_compatibility(data: dict):
     return response.output_text
 
 
-def interpret_money_channel(matrix: dict):
+async def interpret_money_channel(matrix: dict):
     from matrix.prompts import build_money_channel_prompt
 
     prompt = build_money_channel_prompt(matrix)
 
-    response = client.responses.create(
+    response = await client.responses.create(
         model="gpt-5.4-mini",
         input=prompt
     )
@@ -55,12 +57,12 @@ def interpret_money_channel(matrix: dict):
     return response.output_text
 
 
-def interpret_purpose(matrix: dict):
+async def interpret_purpose(matrix: dict):
     from matrix.prompts import build_purpose_prompt
 
     prompt = build_purpose_prompt(matrix)
 
-    response = client.responses.create(
+    response = await client.responses.create(
         model="gpt-5.4-mini",
         input=prompt
     )
@@ -68,12 +70,12 @@ def interpret_purpose(matrix: dict):
     return response.output_text
 
 
-def interpret_karma(matrix: dict):
+async def interpret_karma(matrix: dict):
     from matrix.prompts import build_karma_prompt
 
     prompt = build_karma_prompt(matrix)
 
-    response = client.responses.create(
+    response = await client.responses.create(
         model="gpt-5.4-mini",
         input=prompt
     )
@@ -81,12 +83,12 @@ def interpret_karma(matrix: dict):
     return response.output_text
 
 
-def interpret_child_matrix(matrix: dict):
+async def interpret_child_matrix(matrix: dict):
     from matrix.prompts import build_child_matrix_prompt
 
     prompt = build_child_matrix_prompt(matrix)
 
-    response = client.responses.create(
+    response = await client.responses.create(
         model="gpt-5.4-mini",
         input=prompt
     )

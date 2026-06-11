@@ -83,10 +83,6 @@ class AdminStates(StatesGroup):
     awaiting_balance_writeoff = State()
 
 
-awaiting_broadcast_text = set()
-awaiting_balance_grant = set()
-awaiting_balance_writeoff = set()
-pending_broadcast = {}
 
 
 def markdown_bold_to_html(text):
@@ -175,10 +171,7 @@ async def charge_user_for_spread(user_id):
 
 
 def clear_user_waiting_states(user_id):
-    awaiting_broadcast_text.discard(user_id)
-    awaiting_balance_grant.discard(user_id)
-    awaiting_balance_writeoff.discard(user_id)
-    pending_broadcast.pop(user_id, None)
+    pass
 
 
 async def no_access_message(message: Message):
@@ -199,18 +192,19 @@ async def start(message: Message):
     clear_user_waiting_states(message.from_user.id)
 
     await message.answer(
-        "✨ Матрица судьбы\n\n"
+        "✨ <b>Матрица судьбы</b>\n\n"
         "Добро пожаловать!\n\n"
         "Персональные разборы по системе «Матрица судьбы» (22 Аркана).\n\n"
-        "Доступно:\n\n"
+        "<b>Доступно:</b>\n\n"
         "✨ Личная матрица\n"
         "❤️ Совместимость\n"
         "👶 Детская матрица\n"
         "💰 Денежный канал\n"
         "🎯 Предназначение\n"
         "🔥 Кармические задачи\n\n"
-        "💎 Для новых пользователей доступен бесплатный разбор.\n\n"
+        "💎 <b>Для новых пользователей доступен бесплатный разбор.</b>\n\n"
         "Выберите интересующий раздел ниже 👇",
+        parse_mode="HTML",
         reply_markup=get_main_keyboard(message.from_user.id)
     )
 
@@ -707,7 +701,7 @@ async def promo_five_spreads(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
 
-    pending_broadcast[message.from_user.id] = (
+    broadcast_text = (
         "🎁 <b>Специальное предложение в Матрице судьбы</b>\n\n"
         "Получите сразу <b>5 разборов</b> по выгодной цене — 299 ₽.\n\n"
         "🔮 Можно использовать для вопросов про отношения, карьеру, деньги и личные ситуации.\n\n"
@@ -716,7 +710,7 @@ async def promo_five_spreads(message: Message):
 
     await message.answer(
         "📣 Предпросмотр акции:\n\n"
-        f"{pending_broadcast[message.from_user.id]}\n\n"
+        f"{broadcast_text}\n\n"
         "Отправить?",
         reply_markup=broadcast_confirm_keyboard,
         parse_mode="HTML"
@@ -728,7 +722,7 @@ async def promo_daily_card(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
 
-    pending_broadcast[message.from_user.id] = (
+    broadcast_text = (
         "✨ <b>Личная матрица уже ждёт вас</b>\n\n"
         "Откройте Матрицу судьбы и выберите подходящий разбор.\n\n"
         "Один разбор может подсветить сильные стороны, отношения и направление движения ✨"
@@ -736,7 +730,7 @@ async def promo_daily_card(message: Message):
 
     await message.answer(
         "📣 Предпросмотр акции:\n\n"
-        f"{pending_broadcast[message.from_user.id]}\n\n"
+        f"{broadcast_text}\n\n"
         "Отправить?",
         reply_markup=broadcast_confirm_keyboard,
         parse_mode="HTML"
@@ -748,7 +742,7 @@ async def promo_discount(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
 
-    pending_broadcast[message.from_user.id] = (
+    broadcast_text = (
         "💰 <b>Выгодный момент для разбора</b>\n\n"
         "Пакет из <b>5 разборов</b> сейчас выгоднее, чем покупать по одному.\n\n"
         "✨ Используйте разборы для:\n"
@@ -763,7 +757,7 @@ async def promo_discount(message: Message):
 
     await message.answer(
         "📣 Предпросмотр акции:\n\n"
-        f"{pending_broadcast[message.from_user.id]}\n\n"
+        f"{broadcast_text}\n\n"
         "Отправить?",
         reply_markup=broadcast_confirm_keyboard,
         parse_mode="HTML"
@@ -831,15 +825,14 @@ async def admin_broadcast_start(message: Message):
         await message.answer("Нет доступа.")
         return
 
-    awaiting_broadcast_text.add(message.from_user.id)
-
+    
     await message.answer(
         "📣 Введи текст рассылки.\n\n"
         "Следующее сообщение будет отправлено всем пользователям."
     )
 
 
-@dp.message(F.text == "✅ Отправить")
+
 async def confirm_broadcast(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
@@ -873,7 +866,7 @@ async def confirm_broadcast(message: Message):
     )
 
 
-@dp.message(F.text == "❌ Отмена")
+
 async def cancel_broadcast(message: Message):
     if message.from_user.id != ADMIN_ID:
         return
@@ -883,38 +876,27 @@ async def cancel_broadcast(message: Message):
     await message.answer("❌ Рассылка отменена.", reply_markup=admin_keyboard)
 
 
-async def process_spread(message: Message, spread_type, intro_text, interpret_func):
-    await message.answer(
-        "✨ <b>Раздел скоро будет доступен</b>\n\n"
-        "Сейчас полноценно работает услуга <b>Личная матрица</b>.\n"
-        "Остальные направления подключим поэтапно.",
-        parse_mode="HTML"
-    )
-
-
-
 @dp.message(F.text == "➕ Начислить баланс")
-async def admin_balance_grant_start(message: Message):
+async def admin_balance_grant_start(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         await message.answer("Нет доступа.")
         return
-    awaiting_balance_grant.add(message.from_user.id)
+    await state.set_state(AdminStates.awaiting_balance_grant)
     await message.answer("Введите USER_ID и количество разборов:\n\nПример:\n185955220 5")
 
 
 @dp.message(F.text == "➖ Списать баланс")
-async def admin_balance_writeoff_start(message: Message):
+async def admin_balance_writeoff_start(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         await message.answer("Нет доступа.")
         return
-    awaiting_balance_writeoff.add(message.from_user.id)
+    await state.set_state(AdminStates.awaiting_balance_writeoff)
     await message.answer("Введите USER_ID и количество разборов для списания:\n\nПример:\n185955220 5")
 
 
-@dp.message(lambda message: message.from_user.id in awaiting_balance_grant)
+@dp.message(AdminStates.awaiting_balance_grant)
 async def admin_balance_grant_process(message: Message):
-    awaiting_balance_grant.discard(message.from_user.id)
-
+    
     try:
         target_user_id, amount = map(int, message.text.split())
     except Exception:
@@ -944,10 +926,9 @@ async def admin_balance_grant_process(message: Message):
         pass
 
 
-@dp.message(lambda message: message.from_user.id in awaiting_balance_writeoff)
+@dp.message(AdminStates.awaiting_balance_writeoff)
 async def admin_balance_writeoff_process(message: Message):
-    awaiting_balance_writeoff.discard(message.from_user.id)
-
+    
     try:
         target_user_id, amount = map(int, message.text.split())
     except Exception:
@@ -991,7 +972,7 @@ async def process_personal_matrix_date(message: Message, state: FSMContext):
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
     try:
-        interpretation = interpret_personal_matrix(matrix)
+        interpretation = await interpret_personal_matrix(matrix)
     except Exception as e:
         await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
         return
@@ -1049,7 +1030,7 @@ async def process_compatibility_dates(message: Message, state: FSMContext):
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
     try:
-        interpretation = interpret_compatibility(compatibility)
+        interpretation = await interpret_compatibility(compatibility)
     except Exception as e:
         await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
         return
@@ -1108,7 +1089,7 @@ async def process_child_matrix_date(message: Message, state: FSMContext):
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
     try:
-        interpretation = interpret_child_matrix(matrix)
+        interpretation = await interpret_child_matrix(matrix)
     except Exception as e:
         await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
         return
@@ -1155,7 +1136,7 @@ async def process_money_channel_date(message: Message, state: FSMContext):
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
     try:
-        interpretation = interpret_money_channel(matrix)
+        interpretation = await interpret_money_channel(matrix)
     except Exception as e:
         await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
         return
@@ -1202,7 +1183,7 @@ async def process_purpose_date(message: Message, state: FSMContext):
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
     try:
-        interpretation = interpret_purpose(matrix)
+        interpretation = await interpret_purpose(matrix)
     except Exception as e:
         await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
         return
@@ -1249,7 +1230,7 @@ async def process_karma_date(message: Message, state: FSMContext):
     await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
     try:
-        interpretation = interpret_karma(matrix)
+        interpretation = await interpret_karma(matrix)
     except Exception as e:
         await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
         return
@@ -1281,22 +1262,25 @@ async def process_karma_date(message: Message, state: FSMContext):
 
 
 
-@dp.message()
-async def fallback(message: Message):
-    user_id = message.from_user.id
-
-    if user_id in awaiting_broadcast_text:
-        awaiting_broadcast_text.remove(user_id)
-        pending_broadcast[user_id] = message.text
-
-        await message.answer(
-            "📣 Предпросмотр рассылки:\n\n"
-            f"{message.text}\n\n"
-            "Отправить?",
-            reply_markup=broadcast_confirm_keyboard
-        )
+@dp.message(AdminStates.awaiting_broadcast_text)
+async def process_broadcast_text(message: Message, state: FSMContext):
+    if message.from_user.id != ADMIN_ID:
         return
 
+    pending_broadcast[message.from_user.id] = message.text
+
+    await message.answer(
+        "📣 Предпросмотр рассылки:\n\n"
+        f"{message.text}\n\n"
+        "Отправить?",
+        reply_markup=broadcast_confirm_keyboard
+    )
+
+    await state.clear()
+
+
+@dp.message()
+async def fallback(message: Message):
     await message.answer("Нажми /start чтобы открыть меню.")
 
 
