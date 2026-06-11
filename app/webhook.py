@@ -101,7 +101,7 @@ async def yookassa_webhook(request):
         f"• Отношения\n"
         f"• Карьера\n"
         f"• Деньги\n\n"
-        f"Карты уже готовы ответить на ваши вопросы."
+        f"Энергии Матрицы судьбы готовы к разбору."
     )
 
     return web.json_response({"ok": True})
