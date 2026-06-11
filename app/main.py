@@ -537,16 +537,16 @@ async def matrix_purpose(message: Message, state: FSMContext):
 
 
 @dp.message(F.text == "🔥 Кармические задачи")
-async def matrix_karma(message: Message):
+async def matrix_karma(message: Message, state: FSMContext):
     await save_user(message.from_user)
     user_id = message.from_user.id
 
-    if not user_has_spread_access(user_id):
+    if not await user_has_spread_access(user_id):
         await no_access_message(message)
         return
 
     clear_user_waiting_states(user_id)
-    awaiting_karma_date.add(user_id)
+    await state.set_state(MatrixStates.awaiting_karma_date)
 
     await message.answer(
         "🔥 <b>Кармические задачи</b>\n\n"
@@ -1241,6 +1241,53 @@ async def process_purpose_date(message: Message, state: FSMContext):
         f"• Центр личности — {matrix['base']['center_arcana']}\n"
         f"• Таланты — {matrix['channels']['talent_arcana']}\n"
         f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n\n"
+        f"━━━━━━━━━━\n\n"
+        f"{markdown_bold_to_html(interpretation)}",
+        parse_mode="HTML"
+    )
+
+    await state.clear()
+
+
+
+
+@dp.message(MatrixStates.awaiting_karma_date)
+async def process_karma_date(message: Message, state: FSMContext):
+    user_id = message.from_user.id
+
+    try:
+        matrix = calculate_personal_matrix(message.text)
+    except ValueError as e:
+        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+        return
+
+    await message.answer("🔥 Рассчитываю кармические задачи...")
+    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+
+    try:
+        interpretation = interpret_karma(matrix)
+    except Exception as e:
+        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
+        return
+
+    await save_spread(
+        user_id=user_id,
+        spread_type="Кармические задачи",
+        question=matrix["birth_date"],
+        cards=[],
+        answer=interpretation
+    )
+
+    await charge_user_for_spread(user_id)
+
+    await message.answer(
+        f"🔥 <b>Кармические задачи</b>\n\n"
+        f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+        f"🔢 <b>Ключевые энергии</b>\n\n"
+        f"• Кармические задачи — {matrix['channels']['karma_arcana']}\n"
+        f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n"
+        f"• Отношения — {matrix['channels']['relationship_arcana']}\n"
+        f"• Предназначение — {matrix['base']['destiny_arcana']}\n\n"
         f"━━━━━━━━━━\n\n"
         f"{markdown_bold_to_html(interpretation)}",
         parse_mode="HTML"
