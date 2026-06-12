@@ -5,11 +5,14 @@ DB_FILE = "/opt/bots/matrix_bot/data/database.db"
 
 
 async def get_connection():
-    return await aiosqlite.connect(DB_FILE)
+    conn = await aiosqlite.connect(DB_FILE, timeout=30)
+    await conn.execute("PRAGMA journal_mode=WAL")
+    await conn.execute("PRAGMA busy_timeout=5000")
+    return conn
 
 
 async def ensure_payments_table():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         CREATE TABLE IF NOT EXISTS payments (
             payment_id TEXT PRIMARY KEY,
@@ -23,7 +26,7 @@ async def ensure_payments_table():
 
 
 async def init_db():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         CREATE TABLE IF NOT EXISTS users (
             user_id INTEGER PRIMARY KEY,
@@ -76,7 +79,7 @@ async def init_db():
 
 
 async def save_user(user):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         INSERT OR IGNORE INTO users
         (user_id, username, first_name, created_at)
@@ -93,7 +96,7 @@ async def save_user(user):
 async def get_today_card(user_id):
     today = date.today().isoformat()
 
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("""
         SELECT card_name, orientation, interpretation
         FROM daily_cards
@@ -116,7 +119,7 @@ async def get_today_card(user_id):
 
 
 async def save_daily_card(user_id, card, interpretation):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         INSERT INTO daily_cards
         (
@@ -147,7 +150,7 @@ async def save_spread(user_id, spread_type, question, cards, answer):
         ]
     )
 
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         INSERT INTO spreads
         (
@@ -171,7 +174,7 @@ async def save_spread(user_id, spread_type, question, cards, answer):
 
 
 async def get_user_spreads(user_id, limit=5):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("""
         SELECT
             id,
@@ -203,7 +206,7 @@ async def get_user_spreads(user_id, limit=5):
 
 
 async def get_users_count():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("SELECT COUNT(*) FROM users")
         row = await cursor.fetchone()
         await cursor.close()
@@ -211,7 +214,7 @@ async def get_users_count():
 
 
 async def get_daily_cards_count():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("SELECT COUNT(*) FROM daily_cards")
         row = await cursor.fetchone()
         await cursor.close()
@@ -219,7 +222,7 @@ async def get_daily_cards_count():
 
 
 async def get_spreads_count():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("SELECT COUNT(*) FROM spreads")
         row = await cursor.fetchone()
         await cursor.close()
@@ -227,7 +230,7 @@ async def get_spreads_count():
 
 
 async def get_recent_spreads(limit=10):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("""
         SELECT
             spreads.id,
@@ -263,7 +266,7 @@ async def get_recent_spreads(limit=10):
 
 
 async def get_recent_users(limit=10):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("""
         SELECT
             user_id,
@@ -290,7 +293,7 @@ async def get_recent_users(limit=10):
 
 
 async def can_use_free_spread(user_id):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         CREATE TABLE IF NOT EXISTS user_limits (
             user_id INTEGER PRIMARY KEY,
@@ -316,7 +319,7 @@ async def can_use_free_spread(user_id):
 
 
 async def mark_free_spread_used(user_id):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         CREATE TABLE IF NOT EXISTS user_limits (
             user_id INTEGER PRIMARY KEY,
@@ -346,7 +349,7 @@ async def mark_free_spread_used(user_id):
 
 
 async def get_spread_type_stats():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("""
         SELECT
             spread_type,
@@ -369,7 +372,7 @@ async def get_spread_type_stats():
 
 
 async def get_all_user_ids():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("""
         SELECT user_id
         FROM users
@@ -383,7 +386,7 @@ async def get_all_user_ids():
 
 
 async def get_balance(user_id):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute(
             "SELECT spreads FROM user_balance WHERE user_id = ?",
             (user_id,)
@@ -396,7 +399,7 @@ async def get_balance(user_id):
 
 
 async def add_balance(user_id, amount):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         INSERT OR IGNORE INTO user_balance(user_id, spreads)
         VALUES (?, 0)
@@ -412,7 +415,7 @@ async def add_balance(user_id, amount):
 
 
 async def spend_balance(user_id):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         UPDATE user_balance
         SET spreads = spreads - 1
@@ -424,7 +427,7 @@ async def spend_balance(user_id):
 
 
 async def save_payment(payment_id, user_id, amount, spreads_added):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         CREATE TABLE IF NOT EXISTS payments (
             payment_id TEXT PRIMARY KEY,
@@ -457,7 +460,7 @@ async def save_payment(payment_id, user_id, amount, spreads_added):
 
 
 async def get_top_users(limit=10):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("""
         SELECT
             payments.user_id,
@@ -515,7 +518,7 @@ async def get_top_users(limit=10):
 
 
 async def get_sales_funnel():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         cursor = await conn.execute("SELECT COUNT(*) FROM users")
         users_count = (await cursor.fetchone())[0]
         await cursor.close()
@@ -551,7 +554,7 @@ async def get_sales_funnel():
 
 
 async def get_recent_payments(limit=10):
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         CREATE TABLE IF NOT EXISTS payments (
             payment_id TEXT PRIMARY KEY,
@@ -597,7 +600,7 @@ async def get_recent_payments(limit=10):
 
 
 async def get_payments_stats():
-    async with aiosqlite.connect(DB_FILE) as conn:
+    async with get_connection() as conn:
         await conn.execute("""
         CREATE TABLE IF NOT EXISTS payments (
             payment_id TEXT PRIMARY KEY,
