@@ -79,6 +79,7 @@ class MatrixStates(StatesGroup):
 
 class AdminStates(StatesGroup):
     awaiting_broadcast_text = State()
+    awaiting_broadcast_confirm = State()
     awaiting_balance_grant = State()
     awaiting_balance_writeoff = State()
 
@@ -697,7 +698,7 @@ async def admin_promos(message: Message):
 
 
 @dp.message(F.text == "🎁 Акция: 5 разборов")
-async def promo_five_spreads(message: Message):
+async def promo_five_spreads(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         return
 
@@ -708,6 +709,9 @@ async def promo_five_spreads(message: Message):
         "Нажмите 💎 Баланс, чтобы пополнить запас разборов."
     )
 
+    await state.clear()
+    await state.update_data(broadcast_text=broadcast_text)
+
     await message.answer(
         "📣 Предпросмотр акции:\n\n"
         f"{broadcast_text}\n\n"
@@ -716,9 +720,11 @@ async def promo_five_spreads(message: Message):
         parse_mode="HTML"
     )
 
+    await state.set_state(AdminStates.awaiting_broadcast_confirm)
+
 
 @dp.message(F.text == "✨ Напомнить про личную матрицу")
-async def promo_daily_card(message: Message):
+async def promo_daily_card(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         return
 
@@ -728,6 +734,9 @@ async def promo_daily_card(message: Message):
         "Один разбор может подсветить сильные стороны, отношения и направление движения ✨"
     )
 
+    await state.clear()
+    await state.update_data(broadcast_text=broadcast_text)
+
     await message.answer(
         "📣 Предпросмотр акции:\n\n"
         f"{broadcast_text}\n\n"
@@ -736,9 +745,11 @@ async def promo_daily_card(message: Message):
         parse_mode="HTML"
     )
 
+    await state.set_state(AdminStates.awaiting_broadcast_confirm)
+
 
 @dp.message(F.text == "💰 Скидка на разборы")
-async def promo_discount(message: Message):
+async def promo_discount(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         return
 
@@ -755,6 +766,9 @@ async def promo_discount(message: Message):
         "Нажмите 💎 Баланс и выберите подходящий пакет."
     )
 
+    await state.clear()
+    await state.update_data(broadcast_text=broadcast_text)
+
     await message.answer(
         "📣 Предпросмотр акции:\n\n"
         f"{broadcast_text}\n\n"
@@ -762,6 +776,8 @@ async def promo_discount(message: Message):
         reply_markup=broadcast_confirm_keyboard,
         parse_mode="HTML"
     )
+
+    await state.set_state(AdminStates.awaiting_broadcast_confirm)
 
 
 
@@ -820,12 +836,14 @@ async def admin_top_users(message: Message):
 
 
 @dp.message(F.text == "📣 Рассылка")
-async def admin_broadcast_start(message: Message):
+async def admin_broadcast_start(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         await message.answer("Нет доступа.")
         return
 
-    
+    await state.clear()
+    await state.set_state(AdminStates.awaiting_broadcast_text)
+
     await message.answer(
         "📣 Введи текст рассылки.\n\n"
         "Следующее сообщение будет отправлено всем пользователям."
@@ -833,47 +851,6 @@ async def admin_broadcast_start(message: Message):
 
 
 
-async def confirm_broadcast(message: Message):
-    if message.from_user.id != ADMIN_ID:
-        return
-
-    user_id = message.from_user.id
-
-    if user_id not in pending_broadcast:
-        await message.answer("Нет активной рассылки.")
-        return
-
-    text_to_send = pending_broadcast.pop(user_id)
-    user_ids = get_all_user_ids()
-
-    success = 0
-    failed = 0
-
-    await message.answer(f"📣 Начинаю рассылку по {len(user_ids)} пользователям...")
-
-    for target_user_id in user_ids:
-        try:
-            await bot.send_message(chat_id=target_user_id, text=text_to_send, parse_mode="HTML")
-            success += 1
-        except Exception:
-            failed += 1
-
-    await message.answer(
-        "📣 Рассылка завершена.\n\n"
-        f"✅ Успешно: {success}\n"
-        f"❌ Ошибок: {failed}",
-        reply_markup=admin_keyboard
-    )
-
-
-
-async def cancel_broadcast(message: Message):
-    if message.from_user.id != ADMIN_ID:
-        return
-
-    pending_broadcast.pop(message.from_user.id, None)
-
-    await message.answer("❌ Рассылка отменена.", reply_markup=admin_keyboard)
 
 
 @dp.message(F.text == "➕ Начислить баланс")
@@ -881,6 +858,7 @@ async def admin_balance_grant_start(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         await message.answer("Нет доступа.")
         return
+    await state.clear()
     await state.set_state(AdminStates.awaiting_balance_grant)
     await message.answer("Введите USER_ID и количество разборов:\n\nПример:\n185955220 5")
 
@@ -890,6 +868,7 @@ async def admin_balance_writeoff_start(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         await message.answer("Нет доступа.")
         return
+    await state.clear()
     await state.set_state(AdminStates.awaiting_balance_writeoff)
     await message.answer("Введите USER_ID и количество разборов для списания:\n\nПример:\n185955220 5")
 
@@ -1262,12 +1241,21 @@ async def process_karma_date(message: Message, state: FSMContext):
 
 
 
+@dp.message(AdminStates.awaiting_broadcast_text, F.text == "❌ Отмена")
+async def cancel_broadcast_text_input(message: Message, state: FSMContext):
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await state.clear()
+    await message.answer("❌ Рассылка отменена.", reply_markup=admin_keyboard)
+
+
 @dp.message(AdminStates.awaiting_broadcast_text)
 async def process_broadcast_text(message: Message, state: FSMContext):
     if message.from_user.id != ADMIN_ID:
         return
 
-    pending_broadcast[message.from_user.id] = message.text
+    await state.update_data(broadcast_text=message.text)
 
     await message.answer(
         "📣 Предпросмотр рассылки:\n\n"
@@ -1276,8 +1264,54 @@ async def process_broadcast_text(message: Message, state: FSMContext):
         reply_markup=broadcast_confirm_keyboard
     )
 
+    await state.set_state(AdminStates.awaiting_broadcast_confirm)
+
+
+
+@dp.message(AdminStates.awaiting_broadcast_confirm, F.text == "✅ Отправить")
+async def confirm_broadcast(message: Message, state: FSMContext):
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    data = await state.get_data()
+    text_to_send = data.get("broadcast_text")
+
+    if not text_to_send:
+        await state.clear()
+        await message.answer("Нет активной рассылки.", reply_markup=admin_keyboard)
+        return
+
+    user_ids = await get_all_user_ids()
+    success = 0
+    failed = 0
+
+    await message.answer(f"📣 Начинаю рассылку по {len(user_ids)} пользователям...")
+
+    for target_user_id in user_ids:
+        try:
+            await bot.send_message(chat_id=target_user_id, text=text_to_send, parse_mode="HTML")
+            success += 1
+        except Exception:
+            failed += 1
+        await asyncio.sleep(0.05)
+
     await state.clear()
 
+    await message.answer(
+        "📣 Рассылка завершена.\n\n"
+        f"✅ Успешно: {success}\n"
+        f"❌ Ошибок: {failed}",
+        reply_markup=admin_keyboard
+    )
+
+
+@dp.message(AdminStates.awaiting_broadcast_confirm, F.text == "❌ Отмена")
+async def cancel_broadcast(message: Message, state: FSMContext):
+    if message.from_user.id != ADMIN_ID:
+        return
+
+    await state.clear()
+    await message.answer("❌ Рассылка отменена.", reply_markup=admin_keyboard)
 
 @dp.message()
 async def fallback(message: Message):

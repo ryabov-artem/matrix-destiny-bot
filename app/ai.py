@@ -19,7 +19,7 @@ client = AsyncOpenAI(
 
 
 async def interpret_personal_matrix(matrix: dict):
-    from matrix.prompts import build_personal_matrix_prompt
+    from prompts import build_personal_matrix_prompt
 
     prompt = build_personal_matrix_prompt(matrix)
 
@@ -32,7 +32,7 @@ async def interpret_personal_matrix(matrix: dict):
 
 
 async def interpret_compatibility(data: dict):
-    from matrix.prompts import build_compatibility_prompt
+    from prompts import build_compatibility_prompt
 
     prompt = build_compatibility_prompt(data)
 
@@ -45,7 +45,7 @@ async def interpret_compatibility(data: dict):
 
 
 async def interpret_money_channel(matrix: dict):
-    from matrix.prompts import build_money_channel_prompt
+    from prompts import build_money_channel_prompt
 
     prompt = build_money_channel_prompt(matrix)
 
@@ -58,7 +58,7 @@ async def interpret_money_channel(matrix: dict):
 
 
 async def interpret_purpose(matrix: dict):
-    from matrix.prompts import build_purpose_prompt
+    from prompts import build_purpose_prompt
 
     prompt = build_purpose_prompt(matrix)
 
@@ -71,7 +71,7 @@ async def interpret_purpose(matrix: dict):
 
 
 async def interpret_karma(matrix: dict):
-    from matrix.prompts import build_karma_prompt
+    from prompts import build_karma_prompt
 
     prompt = build_karma_prompt(matrix)
 
@@ -84,7 +84,7 @@ async def interpret_karma(matrix: dict):
 
 
 async def interpret_child_matrix(matrix: dict):
-    from matrix.prompts import build_child_matrix_prompt
+    from prompts import build_child_matrix_prompt
 
     prompt = build_child_matrix_prompt(matrix)
 
