@@ -89,26 +89,17 @@ async def yookassa_webhook(request):
 
     await send_telegram_message(
         user_id,
-        f"🎉 Оплата успешно получена\n\n"
-        f"💎 На баланс зачислено: {count} разбор(ов)\n"
-        f"🔮 Текущий баланс: {balance} разбор(ов)\n\n"
-        f"Спасибо за доверие к Матрице судьбы.\n\n"
-        f"✨ Теперь можно выбрать разбор:\n"
-        f"• Общий\n"
-        f"• Отношения\n"
-        f"• Карьера\n"
-        f"• Деньги\n\n"
-        f"Энергии Матрицы судьбы готовы к разбору."
+        f"🎉 Оплата успешно получена!\\n\\n"
+        f"💎 Зачислено: {count} разбор(ов)\\n"
+        f"🔮 Баланс: {balance} разбор(ов)\\n\\n"
+        f"Выберите интересующий разбор:\\n\\n"
+        f"✨ Личная матрица\\n"
+        f"❤️ Совместимость\\n"
+        f"👶 Детская матрица\\n"
+        f"💰 Денежный канал\\n"
+        f"🎯 Предназначение\\n"
+        f"🔥 Кармические задачи"
     )
-
-    return web.json_response({"ok": True})
-
-
-async def health(request):
-    return web.Response(text="OK")
-
-
-async def on_startup(app):
     await init_payments_table()
 
 

@@ -96,7 +96,8 @@ def get_main_keyboard(user_id):
         [KeyboardButton(text="✨ Личная матрица"), KeyboardButton(text="❤️ Совместимость")],
         [KeyboardButton(text="👶 Детская матрица"), KeyboardButton(text="💰 Денежный канал")],
         [KeyboardButton(text="🎯 Предназначение"), KeyboardButton(text="🔥 Кармические задачи")],
-        [KeyboardButton(text="💎 Баланс"), KeyboardButton(text="ℹ️ О боте")]
+        [KeyboardButton(text="💎 Баланс"), KeyboardButton(text="📜 История")],
+        [KeyboardButton(text="ℹ️ О боте")]
     ]
 
     if user_id == ADMIN_ID:
@@ -538,16 +539,28 @@ async def history(message: Message):
         )
         return
 
-    text = "📜 Последние разборы:\n\n"
+    text = "📜 <b>История разборов</b>\n\n"
 
-    for spread in spreads:
+    emoji_map = {
+        "Личная матрица": "✨",
+        "Совместимость": "❤️",
+        "Детская матрица": "👶",
+        "Денежный канал": "💰",
+        "Предназначение": "🎯",
+        "Кармические задачи": "🔥",
+    }
+
+    for idx, spread in enumerate(spreads, start=1):
+        spread_type = spread.get("spread_type", "Разбор")
+        question = spread.get("question", "—")
+        emoji = emoji_map.get(spread_type, "✨")
+
         text += (
-            f"✨ #{spread['id']} — {spread['spread_type']}\n"
-            f"Вопрос: {spread['question']}\n"
-            f"Данные: {spread['cards']}\n\n"
+            f"{idx}. {emoji} <b>{spread_type}</b>\n"
+            f"📅 {question}\n\n"
         )
 
-    await message.answer(text)
+    await message.answer(text, parse_mode="HTML")
 
 
 @dp.message(F.text == "ℹ️ О боте")
