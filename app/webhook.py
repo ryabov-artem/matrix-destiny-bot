@@ -152,6 +152,11 @@ async def yookassa_webhook(request):
         f"🎯 Предназначение\\n"
         f"🔥 Кармические задачи"
     )
+
+    return web.json_response({"ok": True})
+
+
+async def on_startup(app):
     await init_payments_table()
 
 
