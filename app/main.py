@@ -171,10 +171,6 @@ async def charge_user_for_spread(user_id):
         await spend_balance(user_id)
 
 
-def clear_user_waiting_states(user_id):
-    pass
-
-
 async def no_access_message(message: Message):
     await message.answer(
         "💎 Бесплатный разбор уже использован.\n\n"
@@ -190,7 +186,6 @@ async def no_access_message(message: Message):
 @dp.message(CommandStart())
 async def start(message: Message):
     await save_user(message.from_user)
-    clear_user_waiting_states(message.from_user.id)
 
     await message.answer(
         "✨ <b>Матрица судьбы</b>\n\n"
@@ -423,7 +418,6 @@ async def matrix_personal(message: Message, state: FSMContext):
         await no_access_message(message)
         return
 
-    clear_user_waiting_states(user_id)
     await state.set_state(MatrixStates.awaiting_personal_matrix_date)
 
     await message.answer(
@@ -443,7 +437,6 @@ async def matrix_compatibility(message: Message, state: FSMContext):
         await no_access_message(message)
         return
 
-    clear_user_waiting_states(user_id)
     await state.set_state(MatrixStates.awaiting_compatibility_dates)
 
     await message.answer(
@@ -464,7 +457,6 @@ async def matrix_child(message: Message, state: FSMContext):
         await no_access_message(message)
         return
 
-    clear_user_waiting_states(user_id)
     await state.set_state(MatrixStates.awaiting_child_matrix_date)
 
     await message.answer(
@@ -484,7 +476,6 @@ async def matrix_money(message: Message, state: FSMContext):
         await no_access_message(message)
         return
 
-    clear_user_waiting_states(user_id)
     await state.set_state(MatrixStates.awaiting_money_channel_date)
 
     await message.answer(
@@ -504,7 +495,6 @@ async def matrix_purpose(message: Message, state: FSMContext):
         await no_access_message(message)
         return
 
-    clear_user_waiting_states(user_id)
     await state.set_state(MatrixStates.awaiting_purpose_date)
 
     await message.answer(
@@ -524,7 +514,6 @@ async def matrix_karma(message: Message, state: FSMContext):
         await no_access_message(message)
         return
 
-    clear_user_waiting_states(user_id)
     await state.set_state(MatrixStates.awaiting_karma_date)
 
     await message.answer(
@@ -574,7 +563,6 @@ async def about(message: Message):
 
 @dp.message(F.text == "⚙️ Админка")
 async def admin_panel(message: Message):
-    clear_user_waiting_states(message.from_user.id)
 
     if message.from_user.id != ADMIN_ID:
         await message.answer("Нет доступа.")
@@ -585,7 +573,6 @@ async def admin_panel(message: Message):
 
 @dp.message(F.text == "⬅️ Назад")
 async def back_to_main(message: Message):
-    clear_user_waiting_states(message.from_user.id)
 
     await message.answer(
         "Главное меню",
@@ -670,7 +657,7 @@ async def admin_popularity(message: Message):
         await message.answer("Нет доступа.")
         return
 
-    stats = get_spread_type_stats()
+    stats = await get_spread_type_stats()
 
     if not stats:
         await message.answer("📊 Пока нет данных по разборам.")
