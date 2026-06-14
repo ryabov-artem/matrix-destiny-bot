@@ -67,9 +67,58 @@ session = AiohttpSession(proxy=PROXY_URL)
 bot = Bot(token=BOT_TOKEN, session=session)
 dp = Dispatcher()
 
+active_heavy_requests = set()
+
+
+async def acquire_heavy_request(message: Message) -> bool:
+    user_id = message.from_user.id
+
+    if user_id in active_heavy_requests:
+        await message.answer("⏳ Запрос уже обрабатывается. Дождитесь результата.")
+        return False
+
+    active_heavy_requests.add(user_id)
+    return True
+
+
+def release_heavy_request(user_id: int):
+    active_heavy_requests.discard(user_id)
+
+
+async def safe_delete_current_message(message: Message):
+    try:
+        await message.delete()
+    except Exception:
+        pass
+
+
+async def remember_flow_message(state: FSMContext, sent_message: Message):
+    data = await state.get_data()
+    ids = data.get("flow_message_ids", [])
+    ids.append(sent_message.message_id)
+    await state.update_data(flow_message_ids=ids)
+
+
+async def cleanup_flow_messages(message: Message, state: FSMContext):
+    data = await state.get_data()
+    ids = data.get("flow_message_ids", [])
+
+    for message_id in ids:
+        try:
+            await message.bot.delete_message(message.chat.id, message_id)
+        except Exception:
+            pass
+
+    await state.update_data(flow_message_ids=[])
+
 
 class MatrixStates(StatesGroup):
+    awaiting_personal_matrix_preview = State()
+    awaiting_personal_matrix_confirm = State()
     awaiting_personal_matrix_date = State()
+
+    awaiting_compatibility_preview = State()
+    awaiting_compatibility_confirm = State()
     awaiting_compatibility_dates = State()
     awaiting_child_matrix_date = State()
     awaiting_money_channel_date = State()
@@ -134,6 +183,24 @@ shop_keyboard = ReplyKeyboardMarkup(
 )
 
 
+service_preview_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="✨ Получить разбор")],
+        [KeyboardButton(text="⬅️ Назад")]
+    ],
+    resize_keyboard=True
+)
+
+
+product_confirm_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="✅ Да")],
+        [KeyboardButton(text="⬅️ Отмена")]
+    ],
+    resize_keyboard=True
+)
+
+
 broadcast_confirm_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="✅ Отправить"), KeyboardButton(text="❌ Отмена")]
@@ -181,8 +248,32 @@ async def no_access_message(message: Message):
         "• 5 разборов — 299 ₽\n"
         "• 10 разборов — 499 ₽\n"
         "• 20 разборов — 799 ₽\n\n"
-        "Пополните баланс и возвращайтесь за новым разбором ✨"
+        "Пополните баланс и возвращайтесь за новым разбором ✨",
+        reply_markup=shop_keyboard
     )
+
+
+async def ask_product_confirm(message: Message, state: FSMContext, confirm_state, title: str):
+    if not await user_has_spread_access(message.from_user.id):
+        await state.clear()
+        await no_access_message(message)
+        return
+
+    balance = await get_balance(message.from_user.id)
+    free_text = " + бесплатный разбор" if await can_use_free_spread(message.from_user.id) else ""
+    balance_text = "админ-доступ ∞" if message.from_user.id == ADMIN_ID else f"{balance} разбор(ов){free_text}"
+
+    await state.set_state(confirm_state)
+
+    sent = await message.answer(
+        f"{title}\n\n"
+        f"Стоимость: <b>1</b> разбор\n"
+        f"Ваш баланс: <b>{balance_text}</b>\n\n"
+        f"Списать разбор и продолжить?",
+        parse_mode="HTML",
+        reply_markup=product_confirm_keyboard
+    )
+    await remember_flow_message(state, sent)
 
 
 @dp.message(CommandStart())
@@ -413,41 +504,137 @@ async def buy_twenty_spreads(message: Message):
 
 @dp.message(F.text == "✨ Личная матрица")
 async def matrix_personal(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
     await save_user(message.from_user)
-    user_id = message.from_user.id
 
-    if not await user_has_spread_access(user_id):
-        await no_access_message(message)
-        return
+    await state.clear()
+    await state.set_state(MatrixStates.awaiting_personal_matrix_preview)
 
+    sent = await message.answer(
+        "✨ <b>Личная матрица</b>\n\n"
+        "Базовый персональный разбор по системе 22 Арканов.\n\n"
+        "В разбор входят:\n"
+        "• основные энергии даты рождения\n"
+        "• центр личности\n"
+        "• предназначение\n"
+        "• сильные стороны\n"
+        "• возможные внутренние задачи\n"
+        "• мягкие рекомендации для самопонимания",
+        parse_mode="HTML",
+        reply_markup=service_preview_keyboard
+    )
+    await remember_flow_message(state, sent)
+
+
+@dp.message(MatrixStates.awaiting_personal_matrix_preview, F.text == "✨ Получить разбор")
+async def personal_matrix_preview_get(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await ask_product_confirm(
+        message,
+        state,
+        MatrixStates.awaiting_personal_matrix_confirm,
+        "✨ <b>Личная матрица</b>"
+    )
+
+
+@dp.message(MatrixStates.awaiting_personal_matrix_preview, F.text == "⬅️ Назад")
+async def personal_matrix_preview_back(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_personal_matrix_confirm, F.text == "⬅️ Отмена")
+async def personal_matrix_confirm_cancel(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_personal_matrix_confirm, F.text == "✅ Да")
+async def personal_matrix_confirm_yes(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
     await state.set_state(MatrixStates.awaiting_personal_matrix_date)
 
-    await message.answer(
+    sent = await message.answer(
         "✨ <b>Личная матрица</b>\n\n"
         "Введите дату рождения в формате:\n\n"
         "<b>ДД.ММ.ГГГГ</b>",
         parse_mode="HTML"
     )
+    await remember_flow_message(state, sent)
 
 
 @dp.message(F.text == "❤️ Совместимость")
 async def matrix_compatibility(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
     await save_user(message.from_user)
-    user_id = message.from_user.id
 
-    if not await user_has_spread_access(user_id):
-        await no_access_message(message)
-        return
+    await state.clear()
+    await state.set_state(MatrixStates.awaiting_compatibility_preview)
 
+    sent = await message.answer(
+        "❤️ <b>Совместимость</b>\n\n"
+        "Разбор показывает, как сочетаются две даты рождения в системе 22 Арканов.\n\n"
+        "В разбор входят:\n"
+        "• центр пары\n"
+        "• предназначение союза\n"
+        "• канал отношений\n"
+        "• сильные стороны пары\n"
+        "• возможные напряжения\n"
+        "• мягкие рекомендации для общения",
+        parse_mode="HTML",
+        reply_markup=service_preview_keyboard
+    )
+    await remember_flow_message(state, sent)
+
+
+@dp.message(MatrixStates.awaiting_compatibility_preview, F.text == "✨ Получить разбор")
+async def compatibility_preview_get(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await ask_product_confirm(
+        message,
+        state,
+        MatrixStates.awaiting_compatibility_confirm,
+        "❤️ <b>Совместимость</b>"
+    )
+
+
+@dp.message(MatrixStates.awaiting_compatibility_preview, F.text == "⬅️ Назад")
+async def compatibility_preview_back(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_compatibility_confirm, F.text == "⬅️ Отмена")
+async def compatibility_confirm_cancel(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_compatibility_confirm, F.text == "✅ Да")
+async def compatibility_confirm_yes(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
     await state.set_state(MatrixStates.awaiting_compatibility_dates)
 
-    await message.answer(
+    sent = await message.answer(
         "❤️ <b>Совместимость</b>\n\n"
         "Введите две даты рождения, каждую с новой строки:\n\n"
         "<b>ДД.ММ.ГГГГ</b>\n"
         "<b>ДД.ММ.ГГГГ</b>",
         parse_mode="HTML"
     )
+    await remember_flow_message(state, sent)
 
 
 @dp.message(F.text == "👶 Детская матрица")
@@ -983,105 +1170,142 @@ async def admin_balance_writeoff_process(message: Message):
 
 @dp.message(MatrixStates.awaiting_personal_matrix_date)
 async def process_personal_matrix_date(message: Message, state: FSMContext):
-    user_id = message.from_user.id
-
-    try:
-        matrix = calculate_personal_matrix(message.text)
-    except ValueError as e:
-        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+    if not await acquire_heavy_request(message):
         return
 
-    await message.answer("✨ Рассчитываю вашу личную матрицу...")
-    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-
     try:
-        interpretation = await interpret_personal_matrix(matrix)
-    except Exception as e:
-        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
-        return
+        await safe_delete_current_message(message)
+        user_id = message.from_user.id
 
-    await save_spread(
-        user_id=user_id,
-        spread_type="Личная матрица",
-        question=matrix["birth_date"],
-        cards=[],
-        answer=interpretation
-    )
+        try:
+            matrix = calculate_personal_matrix(message.text)
+        except ValueError as e:
+            sent = await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            await remember_flow_message(state, sent)
+            return
 
-    await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
 
-    await message.answer(
-        f"✨ <b>Личная матрица</b>\n\n"
-        f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
-        f"🔢 <b>Основные энергии</b>\n\n"
-        f"• День — {matrix['base']['day_arcana']}\n"
-        f"• Месяц — {matrix['base']['month_arcana']}\n"
-        f"• Год — {matrix['base']['year_arcana']}\n"
-        f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
-        f"• Центр личности — {matrix['base']['center_arcana']}\n\n"
-        f"━━━━━━━━━━\n\n"
-        f"{markdown_bold_to_html(interpretation)}",
-        parse_mode="HTML"
-    )
+        sent = await message.answer("✨ Рассчитываю вашу личную матрицу...")
+        await remember_flow_message(state, sent)
+        await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
-    await state.clear()
+        try:
+            interpretation = await interpret_personal_matrix(matrix)
+        except Exception as e:
+            await cleanup_flow_messages(message, state)
+            await message.answer(
+                f"Не удалось подготовить разбор. Ошибка: {e}",
+                reply_markup=get_main_keyboard(message.from_user.id)
+            )
+            await state.clear()
+            return
+
+        await save_spread(
+            user_id=user_id,
+            spread_type="Личная матрица",
+            question=matrix["birth_date"],
+            cards=[],
+            answer=interpretation
+        )
+
+        await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
+
+        await message.answer(
+            f"✨ <b>Личная матрица</b>\n\n"
+            f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"🔢 <b>Основные энергии</b>\n\n"
+            f"• День — {matrix['base']['day_arcana']}\n"
+            f"• Месяц — {matrix['base']['month_arcana']}\n"
+            f"• Год — {matrix['base']['year_arcana']}\n"
+            f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
+            f"• Центр личности — {matrix['base']['center_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML",
+            reply_markup=get_main_keyboard(message.from_user.id)
+        )
+
+        await state.clear()
+    finally:
+        release_heavy_request(message.from_user.id)
 
 
 
 
 @dp.message(MatrixStates.awaiting_compatibility_dates)
 async def process_compatibility_dates(message: Message, state: FSMContext):
-    user_id = message.from_user.id
+    if not await acquire_heavy_request(message):
+        return
 
-    dates = [line.strip() for line in message.text.splitlines() if line.strip()]
+    try:
+        await safe_delete_current_message(message)
+        user_id = message.from_user.id
 
-    if len(dates) != 2:
-        await message.answer(
-            "⚠️ Нужно ввести ровно две даты, каждую с новой строки.\n\n"
-            "ДД.ММ.ГГГГ\n"
-            "ДД.ММ.ГГГГ"
+        dates = [line.strip() for line in message.text.splitlines() if line.strip()]
+
+        if len(dates) != 2:
+            sent = await message.answer(
+                "⚠️ Нужно ввести ровно две даты, каждую с новой строки.\n\n"
+                "ДД.ММ.ГГГГ\n"
+                "ДД.ММ.ГГГГ"
+            )
+            await remember_flow_message(state, sent)
+            return
+
+        try:
+            compatibility = calculate_compatibility_matrix(dates[0], dates[1])
+        except ValueError as e:
+            sent = await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз.")
+            await remember_flow_message(state, sent)
+            return
+
+        await cleanup_flow_messages(message, state)
+
+        sent = await message.answer("❤️ Рассчитываю совместимость...")
+        await remember_flow_message(state, sent)
+        await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+
+        try:
+            interpretation = await interpret_compatibility(compatibility)
+        except Exception as e:
+            await cleanup_flow_messages(message, state)
+            await message.answer(
+                f"Не удалось подготовить разбор. Ошибка: {e}",
+                reply_markup=get_main_keyboard(message.from_user.id)
+            )
+            await state.clear()
+            return
+
+        await save_spread(
+            user_id=user_id,
+            spread_type="Совместимость",
+            question=f"{compatibility['date1']} + {compatibility['date2']}",
+            cards=[],
+            answer=interpretation
         )
-        return
 
-    try:
-        compatibility = calculate_compatibility_matrix(dates[0], dates[1])
-    except ValueError as e:
-        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз.")
-        return
+        await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
 
-    await message.answer("❤️ Рассчитываю совместимость...")
-    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+        await message.answer(
+            f"❤️ <b>Совместимость</b>\n\n"
+            f"👤 Партнёр 1: <b>{compatibility['date1']}</b>\n"
+            f"👤 Партнёр 2: <b>{compatibility['date2']}</b>\n\n"
+            f"🔢 <b>Энергии союза</b>\n\n"
+            f"• Центр пары — {compatibility['pair']['center_arcana']}\n"
+            f"• Предназначение пары — {compatibility['pair']['destiny_arcana']}\n"
+            f"• Канал отношений — {compatibility['pair']['relationship_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML",
+            reply_markup=get_main_keyboard(message.from_user.id)
+        )
 
-    try:
-        interpretation = await interpret_compatibility(compatibility)
-    except Exception as e:
-        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
-        return
-
-    await save_spread(
-        user_id=user_id,
-        spread_type="Совместимость",
-        question=f"{compatibility['date1']} + {compatibility['date2']}",
-        cards=[],
-        answer=interpretation
-    )
-
-    await charge_user_for_spread(user_id)
-
-    await message.answer(
-        f"❤️ <b>Совместимость</b>\n\n"
-        f"👤 Партнер 1: <b>{compatibility['date1']}</b>\n"
-        f"👤 Партнер 2: <b>{compatibility['date2']}</b>\n\n"
-        f"🔢 <b>Энергии союза</b>\n\n"
-        f"• Центр пары — {compatibility['pair']['center_arcana']}\n"
-        f"• Предназначение пары — {compatibility['pair']['destiny_arcana']}\n"
-        f"• Канал отношений — {compatibility['pair']['relationship_arcana']}\n\n"
-        f"━━━━━━━━━━\n\n"
-        f"{markdown_bold_to_html(interpretation)}",
-        parse_mode="HTML"
-    )
-
-    await state.clear()
+        await state.clear()
+    finally:
+        release_heavy_request(message.from_user.id)
 
 
 

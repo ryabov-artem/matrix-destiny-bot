@@ -4,11 +4,8 @@ from datetime import datetime, date
 DB_FILE = "/opt/bots/matrix_bot/data/database.db"
 
 
-async def get_connection():
-    conn = await aiosqlite.connect(DB_FILE, timeout=30)
-    await conn.execute("PRAGMA journal_mode=WAL")
-    await conn.execute("PRAGMA busy_timeout=5000")
-    return conn
+def get_connection():
+    return aiosqlite.connect(DB_FILE, timeout=30)
 
 
 async def ensure_payments_table():
