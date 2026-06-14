@@ -157,8 +157,7 @@ def get_main_keyboard(user_id):
         [KeyboardButton(text="✨ Личная матрица"), KeyboardButton(text="❤️ Совместимость")],
         [KeyboardButton(text="👶 Детская матрица"), KeyboardButton(text="💰 Денежный канал")],
         [KeyboardButton(text="🎯 Предназначение"), KeyboardButton(text="🔥 Кармические задачи")],
-        [KeyboardButton(text="💎 Баланс"), KeyboardButton(text="📜 История")],
-        [KeyboardButton(text="ℹ️ О боте")]
+        [KeyboardButton(text="💎 Баланс"), KeyboardButton(text="ℹ️ О боте")]
     ]
 
     if user_id == ADMIN_ID:
@@ -915,43 +914,6 @@ async def karma_confirm_yes(message: Message, state: FSMContext):
         parse_mode="HTML"
     )
     await remember_flow_message(state, sent)
-
-
-@dp.message(F.text == "📜 История")
-async def history(message: Message):
-    await save_user(message.from_user)
-
-    spreads = await get_user_spreads(message.from_user.id, limit=5)
-
-    if not spreads:
-        await message.answer(
-            "📜 История пока пустая.\n\n"
-            "Сделайте разбор, и он появится здесь."
-        )
-        return
-
-    text = "📜 <b>История разборов</b>\n\n"
-
-    emoji_map = {
-        "Личная матрица": "✨",
-        "Совместимость": "❤️",
-        "Детская матрица": "👶",
-        "Денежный канал": "💰",
-        "Предназначение": "🎯",
-        "Кармические задачи": "🔥",
-    }
-
-    for idx, spread in enumerate(spreads, start=1):
-        spread_type = spread.get("spread_type", "Разбор")
-        question = spread.get("question", "—")
-        emoji = emoji_map.get(spread_type, "✨")
-
-        text += (
-            f"{idx}. {emoji} <b>{spread_type}</b>\n"
-            f"📅 {question}\n\n"
-        )
-
-    await message.answer(text, parse_mode="HTML")
 
 
 @dp.message(F.text == "ℹ️ О боте")
