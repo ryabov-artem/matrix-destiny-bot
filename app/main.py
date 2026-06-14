@@ -120,9 +120,21 @@ class MatrixStates(StatesGroup):
     awaiting_compatibility_preview = State()
     awaiting_compatibility_confirm = State()
     awaiting_compatibility_dates = State()
+
+    awaiting_child_matrix_preview = State()
+    awaiting_child_matrix_confirm = State()
     awaiting_child_matrix_date = State()
+
+    awaiting_money_channel_preview = State()
+    awaiting_money_channel_confirm = State()
     awaiting_money_channel_date = State()
+
+    awaiting_purpose_preview = State()
+    awaiting_purpose_confirm = State()
     awaiting_purpose_date = State()
+
+    awaiting_karma_preview = State()
+    awaiting_karma_confirm = State()
     awaiting_karma_date = State()
 
 
@@ -639,78 +651,270 @@ async def compatibility_confirm_yes(message: Message, state: FSMContext):
 
 @dp.message(F.text == "👶 Детская матрица")
 async def matrix_child(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
     await save_user(message.from_user)
-    user_id = message.from_user.id
 
-    if not await user_has_spread_access(user_id):
-        await no_access_message(message)
-        return
+    await state.clear()
+    await state.set_state(MatrixStates.awaiting_child_matrix_preview)
 
+    sent = await message.answer(
+        "👶 <b>Детская матрица</b>\n\n"
+        "Мягкий разбор ребёнка по системе 22 Арканов.\n\n"
+        "В разбор входят:\n"
+        "• центр личности ребёнка\n"
+        "• таланты и природные способности\n"
+        "• особенности общения и отношений\n"
+        "• зона комфорта\n"
+        "• рекомендации для бережного подхода\n\n"
+        "Раздел подходит только для детей до 18 лет.",
+        parse_mode="HTML",
+        reply_markup=service_preview_keyboard
+    )
+    await remember_flow_message(state, sent)
+
+
+@dp.message(MatrixStates.awaiting_child_matrix_preview, F.text == "✨ Получить разбор")
+async def child_matrix_preview_get(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await ask_product_confirm(
+        message,
+        state,
+        MatrixStates.awaiting_child_matrix_confirm,
+        "👶 <b>Детская матрица</b>"
+    )
+
+
+@dp.message(MatrixStates.awaiting_child_matrix_preview, F.text == "⬅️ Назад")
+async def child_matrix_preview_back(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_child_matrix_confirm, F.text == "⬅️ Отмена")
+async def child_matrix_confirm_cancel(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_child_matrix_confirm, F.text == "✅ Да")
+async def child_matrix_confirm_yes(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
     await state.set_state(MatrixStates.awaiting_child_matrix_date)
 
-    await message.answer(
+    sent = await message.answer(
         "👶 <b>Детская матрица</b>\n\n"
         "Введите дату рождения ребёнка в формате:\n\n"
         "<b>ДД.ММ.ГГГГ</b>",
         parse_mode="HTML"
     )
+    await remember_flow_message(state, sent)
 
 
 @dp.message(F.text == "💰 Денежный канал")
 async def matrix_money(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
     await save_user(message.from_user)
-    user_id = message.from_user.id
 
-    if not await user_has_spread_access(user_id):
-        await no_access_message(message)
-        return
+    await state.clear()
+    await state.set_state(MatrixStates.awaiting_money_channel_preview)
 
+    sent = await message.answer(
+        "💰 <b>Денежный канал</b>\n\n"
+        "Разбор показывает денежную энергию и способы реализации через систему 22 Арканов.\n\n"
+        "В разбор входят:\n"
+        "• денежный канал\n"
+        "• таланты и сильные стороны\n"
+        "• энергия предназначения\n"
+        "• центр личности\n"
+        "• возможные денежные блоки\n"
+        "• мягкие рекомендации для роста",
+        parse_mode="HTML",
+        reply_markup=service_preview_keyboard
+    )
+    await remember_flow_message(state, sent)
+
+
+@dp.message(MatrixStates.awaiting_money_channel_preview, F.text == "✨ Получить разбор")
+async def money_channel_preview_get(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await ask_product_confirm(
+        message,
+        state,
+        MatrixStates.awaiting_money_channel_confirm,
+        "💰 <b>Денежный канал</b>"
+    )
+
+
+@dp.message(MatrixStates.awaiting_money_channel_preview, F.text == "⬅️ Назад")
+async def money_channel_preview_back(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_money_channel_confirm, F.text == "⬅️ Отмена")
+async def money_channel_confirm_cancel(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_money_channel_confirm, F.text == "✅ Да")
+async def money_channel_confirm_yes(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
     await state.set_state(MatrixStates.awaiting_money_channel_date)
 
-    await message.answer(
+    sent = await message.answer(
         "💰 <b>Денежный канал</b>\n\n"
         "Введите дату рождения в формате:\n\n"
         "<b>ДД.ММ.ГГГГ</b>",
         parse_mode="HTML"
     )
+    await remember_flow_message(state, sent)
 
 
 @dp.message(F.text == "🎯 Предназначение")
 async def matrix_purpose(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
     await save_user(message.from_user)
-    user_id = message.from_user.id
 
-    if not await user_has_spread_access(user_id):
-        await no_access_message(message)
-        return
+    await state.clear()
+    await state.set_state(MatrixStates.awaiting_purpose_preview)
 
+    sent = await message.answer(
+        "🎯 <b>Предназначение</b>\n\n"
+        "Разбор помогает увидеть направление реализации через систему 22 Арканов.\n\n"
+        "В разбор входят:\n"
+        "• энергия предназначения\n"
+        "• центр личности\n"
+        "• таланты\n"
+        "• зона комфорта\n"
+        "• сильные стороны реализации\n"
+        "• мягкие рекомендации для движения вперёд",
+        parse_mode="HTML",
+        reply_markup=service_preview_keyboard
+    )
+    await remember_flow_message(state, sent)
+
+
+@dp.message(MatrixStates.awaiting_purpose_preview, F.text == "✨ Получить разбор")
+async def purpose_preview_get(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await ask_product_confirm(
+        message,
+        state,
+        MatrixStates.awaiting_purpose_confirm,
+        "🎯 <b>Предназначение</b>"
+    )
+
+
+@dp.message(MatrixStates.awaiting_purpose_preview, F.text == "⬅️ Назад")
+async def purpose_preview_back(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_purpose_confirm, F.text == "⬅️ Отмена")
+async def purpose_confirm_cancel(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_purpose_confirm, F.text == "✅ Да")
+async def purpose_confirm_yes(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
     await state.set_state(MatrixStates.awaiting_purpose_date)
 
-    await message.answer(
+    sent = await message.answer(
         "🎯 <b>Предназначение</b>\n\n"
         "Введите дату рождения в формате:\n\n"
         "<b>ДД.ММ.ГГГГ</b>",
         parse_mode="HTML"
     )
+    await remember_flow_message(state, sent)
 
 
 @dp.message(F.text == "🔥 Кармические задачи")
 async def matrix_karma(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
     await save_user(message.from_user)
-    user_id = message.from_user.id
 
-    if not await user_has_spread_access(user_id):
-        await no_access_message(message)
-        return
+    await state.clear()
+    await state.set_state(MatrixStates.awaiting_karma_preview)
 
+    sent = await message.answer(
+        "🔥 <b>Кармические задачи</b>\n\n"
+        "Разбор показывает внутренние уроки и зоны роста по системе 22 Арканов.\n\n"
+        "В разбор входят:\n"
+        "• кармические задачи\n"
+        "• зона комфорта\n"
+        "• канал отношений\n"
+        "• энергия предназначения\n"
+        "• возможные повторяющиеся сценарии\n"
+        "• мягкие рекомендации для осознанности",
+        parse_mode="HTML",
+        reply_markup=service_preview_keyboard
+    )
+    await remember_flow_message(state, sent)
+
+
+@dp.message(MatrixStates.awaiting_karma_preview, F.text == "✨ Получить разбор")
+async def karma_preview_get(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await ask_product_confirm(
+        message,
+        state,
+        MatrixStates.awaiting_karma_confirm,
+        "🔥 <b>Кармические задачи</b>"
+    )
+
+
+@dp.message(MatrixStates.awaiting_karma_preview, F.text == "⬅️ Назад")
+async def karma_preview_back(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_karma_confirm, F.text == "⬅️ Отмена")
+async def karma_confirm_cancel(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
+    await state.clear()
+    await message.answer("Главное меню", reply_markup=get_main_keyboard(message.from_user.id))
+
+
+@dp.message(MatrixStates.awaiting_karma_confirm, F.text == "✅ Да")
+async def karma_confirm_yes(message: Message, state: FSMContext):
+    await safe_delete_current_message(message)
+    await cleanup_flow_messages(message, state)
     await state.set_state(MatrixStates.awaiting_karma_date)
 
-    await message.answer(
+    sent = await message.answer(
         "🔥 <b>Кармические задачи</b>\n\n"
         "Введите дату рождения в формате:\n\n"
         "<b>ДД.ММ.ГГГГ</b>",
         parse_mode="HTML"
     )
+    await remember_flow_message(state, sent)
 
 
 @dp.message(F.text == "📜 История")
@@ -1312,200 +1516,273 @@ async def process_compatibility_dates(message: Message, state: FSMContext):
 
 @dp.message(MatrixStates.awaiting_child_matrix_date)
 async def process_child_matrix_date(message: Message, state: FSMContext):
-    user_id = message.from_user.id
-
-    try:
-        matrix = calculate_personal_matrix(message.text)
-    except ValueError as e:
-        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+    if not await acquire_heavy_request(message):
         return
 
-    from datetime import datetime
-    birth_date = datetime.strptime(matrix["birth_date"], "%d.%m.%Y").date()
-    today = datetime.now().date()
-    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    try:
+        await safe_delete_current_message(message)
+        user_id = message.from_user.id
 
-    if age > 18:
-        await message.answer(
-            "⚠️ Для детской матрицы укажите дату рождения ребёнка до 18 лет.\n\n"
-            "Для взрослых используйте раздел «✨ Личная матрица»."
+        try:
+            matrix = calculate_personal_matrix(message.text)
+        except ValueError as e:
+            sent = await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            await remember_flow_message(state, sent)
+            return
+
+        from datetime import datetime
+        birth_date = datetime.strptime(matrix["birth_date"], "%d.%m.%Y").date()
+        today = datetime.now().date()
+        age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+        if age > 18:
+            sent = await message.answer(
+                "⚠️ Для детской матрицы укажите дату рождения ребёнка до 18 лет.\n\n"
+                "Для взрослых используйте раздел «✨ Личная матрица»."
+            )
+            await remember_flow_message(state, sent)
+            return
+
+        await cleanup_flow_messages(message, state)
+
+        sent = await message.answer("👶 Рассчитываю детскую матрицу...")
+        await remember_flow_message(state, sent)
+        await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+
+        try:
+            interpretation = await interpret_child_matrix(matrix)
+        except Exception as e:
+            await cleanup_flow_messages(message, state)
+            await message.answer(
+                f"Не удалось подготовить разбор. Ошибка: {e}",
+                reply_markup=get_main_keyboard(message.from_user.id)
+            )
+            await state.clear()
+            return
+
+        await save_spread(
+            user_id=user_id,
+            spread_type="Детская матрица",
+            question=matrix["birth_date"],
+            cards=[],
+            answer=interpretation
         )
-        return
 
-    await message.answer("👶 Рассчитываю детскую матрицу...")
-    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
+        await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
 
-    try:
-        interpretation = await interpret_child_matrix(matrix)
-    except Exception as e:
-        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
-        return
+        await message.answer(
+            f"👶 <b>Детская матрица</b>\n\n"
+            f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"🔢 <b>Ключевые энергии</b>\n\n"
+            f"• Центр личности — {matrix['base']['center_arcana']}\n"
+            f"• Таланты — {matrix['channels']['talent_arcana']}\n"
+            f"• Отношения — {matrix['channels']['relationship_arcana']}\n"
+            f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML",
+            reply_markup=get_main_keyboard(message.from_user.id)
+        )
 
-    await save_spread(
-        user_id=user_id,
-        spread_type="Детская матрица",
-        question=matrix["birth_date"],
-        cards=[],
-        answer=interpretation
-    )
-
-    await charge_user_for_spread(user_id)
-
-    await message.answer(
-        f"👶 <b>Детская матрица</b>\n\n"
-        f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
-        f"🔢 <b>Ключевые энергии</b>\n\n"
-        f"• Центр личности — {matrix['base']['center_arcana']}\n"
-        f"• Таланты — {matrix['channels']['talent_arcana']}\n"
-        f"• Отношения — {matrix['channels']['relationship_arcana']}\n"
-        f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n\n"
-        f"━━━━━━━━━━\n\n"
-        f"{markdown_bold_to_html(interpretation)}",
-        parse_mode="HTML"
-    )
-
-    await state.clear()
+        await state.clear()
+    finally:
+        release_heavy_request(message.from_user.id)
 
 
 
 
 @dp.message(MatrixStates.awaiting_money_channel_date)
 async def process_money_channel_date(message: Message, state: FSMContext):
-    user_id = message.from_user.id
-
-    try:
-        matrix = calculate_personal_matrix(message.text)
-    except ValueError as e:
-        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+    if not await acquire_heavy_request(message):
         return
 
-    await message.answer("💰 Рассчитываю денежный канал...")
-    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-
     try:
-        interpretation = await interpret_money_channel(matrix)
-    except Exception as e:
-        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
-        return
+        await safe_delete_current_message(message)
+        user_id = message.from_user.id
 
-    await save_spread(
-        user_id=user_id,
-        spread_type="Денежный канал",
-        question=matrix["birth_date"],
-        cards=[],
-        answer=interpretation
-    )
+        try:
+            matrix = calculate_personal_matrix(message.text)
+        except ValueError as e:
+            sent = await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            await remember_flow_message(state, sent)
+            return
 
-    await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
 
-    await message.answer(
-        f"💰 <b>Денежный канал</b>\n\n"
-        f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
-        f"🔢 <b>Ключевые энергии</b>\n\n"
-        f"• Денежный канал — {matrix['channels']['money_arcana']}\n"
-        f"• Таланты — {matrix['channels']['talent_arcana']}\n"
-        f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
-        f"• Центр личности — {matrix['base']['center_arcana']}\n\n"
-        f"━━━━━━━━━━\n\n"
-        f"{markdown_bold_to_html(interpretation)}",
-        parse_mode="HTML"
-    )
+        sent = await message.answer("💰 Рассчитываю денежный канал...")
+        await remember_flow_message(state, sent)
+        await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
-    await state.clear()
+        try:
+            interpretation = await interpret_money_channel(matrix)
+        except Exception as e:
+            await cleanup_flow_messages(message, state)
+            await message.answer(
+                f"Не удалось подготовить разбор. Ошибка: {e}",
+                reply_markup=get_main_keyboard(message.from_user.id)
+            )
+            await state.clear()
+            return
+
+        await save_spread(
+            user_id=user_id,
+            spread_type="Денежный канал",
+            question=matrix["birth_date"],
+            cards=[],
+            answer=interpretation
+        )
+
+        await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
+
+        await message.answer(
+            f"💰 <b>Денежный канал</b>\n\n"
+            f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"🔢 <b>Ключевые энергии</b>\n\n"
+            f"• Денежный канал — {matrix['channels']['money_arcana']}\n"
+            f"• Таланты — {matrix['channels']['talent_arcana']}\n"
+            f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
+            f"• Центр личности — {matrix['base']['center_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML",
+            reply_markup=get_main_keyboard(message.from_user.id)
+        )
+
+        await state.clear()
+    finally:
+        release_heavy_request(message.from_user.id)
 
 
 
 
 @dp.message(MatrixStates.awaiting_purpose_date)
 async def process_purpose_date(message: Message, state: FSMContext):
-    user_id = message.from_user.id
-
-    try:
-        matrix = calculate_personal_matrix(message.text)
-    except ValueError as e:
-        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+    if not await acquire_heavy_request(message):
         return
 
-    await message.answer("🎯 Рассчитываю предназначение...")
-    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-
     try:
-        interpretation = await interpret_purpose(matrix)
-    except Exception as e:
-        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
-        return
+        await safe_delete_current_message(message)
+        user_id = message.from_user.id
 
-    await save_spread(
-        user_id=user_id,
-        spread_type="Предназначение",
-        question=matrix["birth_date"],
-        cards=[],
-        answer=interpretation
-    )
+        try:
+            matrix = calculate_personal_matrix(message.text)
+        except ValueError as e:
+            sent = await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            await remember_flow_message(state, sent)
+            return
 
-    await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
 
-    await message.answer(
-        f"🎯 <b>Предназначение</b>\n\n"
-        f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
-        f"🔢 <b>Ключевые энергии</b>\n\n"
-        f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
-        f"• Центр личности — {matrix['base']['center_arcana']}\n"
-        f"• Таланты — {matrix['channels']['talent_arcana']}\n"
-        f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n\n"
-        f"━━━━━━━━━━\n\n"
-        f"{markdown_bold_to_html(interpretation)}",
-        parse_mode="HTML"
-    )
+        sent = await message.answer("🎯 Рассчитываю предназначение...")
+        await remember_flow_message(state, sent)
+        await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
-    await state.clear()
+        try:
+            interpretation = await interpret_purpose(matrix)
+        except Exception as e:
+            await cleanup_flow_messages(message, state)
+            await message.answer(
+                f"Не удалось подготовить разбор. Ошибка: {e}",
+                reply_markup=get_main_keyboard(message.from_user.id)
+            )
+            await state.clear()
+            return
+
+        await save_spread(
+            user_id=user_id,
+            spread_type="Предназначение",
+            question=matrix["birth_date"],
+            cards=[],
+            answer=interpretation
+        )
+
+        await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
+
+        await message.answer(
+            f"🎯 <b>Предназначение</b>\n\n"
+            f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"🔢 <b>Ключевые энергии</b>\n\n"
+            f"• Предназначение — {matrix['base']['destiny_arcana']}\n"
+            f"• Центр личности — {matrix['base']['center_arcana']}\n"
+            f"• Таланты — {matrix['channels']['talent_arcana']}\n"
+            f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML",
+            reply_markup=get_main_keyboard(message.from_user.id)
+        )
+
+        await state.clear()
+    finally:
+        release_heavy_request(message.from_user.id)
 
 
 
 
 @dp.message(MatrixStates.awaiting_karma_date)
 async def process_karma_date(message: Message, state: FSMContext):
-    user_id = message.from_user.id
-
-    try:
-        matrix = calculate_personal_matrix(message.text)
-    except ValueError as e:
-        await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+    if not await acquire_heavy_request(message):
         return
 
-    await message.answer("🔥 Рассчитываю кармические задачи...")
-    await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-
     try:
-        interpretation = await interpret_karma(matrix)
-    except Exception as e:
-        await message.answer(f"Не удалось подготовить разбор. Ошибка: {e}")
-        return
+        await safe_delete_current_message(message)
+        user_id = message.from_user.id
 
-    await save_spread(
-        user_id=user_id,
-        spread_type="Кармические задачи",
-        question=matrix["birth_date"],
-        cards=[],
-        answer=interpretation
-    )
+        try:
+            matrix = calculate_personal_matrix(message.text)
+        except ValueError as e:
+            sent = await message.answer(f"⚠️ {e}\n\nПопробуйте ещё раз в формате ДД.ММ.ГГГГ")
+            await remember_flow_message(state, sent)
+            return
 
-    await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
 
-    await message.answer(
-        f"🔥 <b>Кармические задачи</b>\n\n"
-        f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
-        f"🔢 <b>Ключевые энергии</b>\n\n"
-        f"• Кармические задачи — {matrix['channels']['karma_arcana']}\n"
-        f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n"
-        f"• Отношения — {matrix['channels']['relationship_arcana']}\n"
-        f"• Предназначение — {matrix['base']['destiny_arcana']}\n\n"
-        f"━━━━━━━━━━\n\n"
-        f"{markdown_bold_to_html(interpretation)}",
-        parse_mode="HTML"
-    )
+        sent = await message.answer("🔥 Рассчитываю кармические задачи...")
+        await remember_flow_message(state, sent)
+        await bot.send_chat_action(chat_id=message.chat.id, action="typing")
 
-    await state.clear()
+        try:
+            interpretation = await interpret_karma(matrix)
+        except Exception as e:
+            await cleanup_flow_messages(message, state)
+            await message.answer(
+                f"Не удалось подготовить разбор. Ошибка: {e}",
+                reply_markup=get_main_keyboard(message.from_user.id)
+            )
+            await state.clear()
+            return
+
+        await save_spread(
+            user_id=user_id,
+            spread_type="Кармические задачи",
+            question=matrix["birth_date"],
+            cards=[],
+            answer=interpretation
+        )
+
+        await charge_user_for_spread(user_id)
+        await cleanup_flow_messages(message, state)
+
+        await message.answer(
+            f"🔥 <b>Кармические задачи</b>\n\n"
+            f"📅 Дата рождения: <b>{matrix['birth_date']}</b>\n\n"
+            f"🔢 <b>Ключевые энергии</b>\n\n"
+            f"• Кармические задачи — {matrix['channels']['karma_arcana']}\n"
+            f"• Зона комфорта — {matrix['channels']['comfort_zone_arcana']}\n"
+            f"• Отношения — {matrix['channels']['relationship_arcana']}\n"
+            f"• Предназначение — {matrix['base']['destiny_arcana']}\n\n"
+            f"━━━━━━━━━━\n\n"
+            f"{markdown_bold_to_html(interpretation)}",
+            parse_mode="HTML",
+            reply_markup=get_main_keyboard(message.from_user.id)
+        )
+
+        await state.clear()
+    finally:
+        release_heavy_request(message.from_user.id)
 
 
 
