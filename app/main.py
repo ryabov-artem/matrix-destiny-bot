@@ -1828,19 +1828,25 @@ async def fallback(message: Message):
 async def main():
     await init_db()
     
-    # Добавляем внутренний "предохранитель" от спама процессора
     while True:
         try:
             print("🚀 Запуск polling для бота Матрица...")
             await dp.start_polling(bot)
+            # Если polling завершился сам по себе без ошибок (например, при stop), 
+            # выходим из цикла, чтобы дать сервису закрыться!
+            break 
+        except (KeyboardInterrupt, SystemExit):
+            print("🛑 Получен сигнал на остановку сервиса. Выход...")
+            break
         except Exception as e:
+            # Сюда попадают ТОЛЬКО сетевые сбои (таймауты прокси и т.д.)
             print(f"⚠️ Сетевой сбой в Матрице (возможно прокси): {e}")
             print("⏳ Ожидание 10 секунд перед повторной попыткой подключения...")
-            await asyncio.sleep(10) # Скрипт мирно спит, CPU отдыхает (0%)
+            await asyncio.sleep(10)
 
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
-    except KeyboardInterrupt:
-        print("Бот остановлен вручную.")
+    except (KeyboardInterrupt, SystemExit):
+        print("Бот успешно остановлен.")
